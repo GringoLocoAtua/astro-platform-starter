@@ -1,13 +1,16 @@
 from __future__ import annotations
 
-from PyQt6.QtCore import pyqtSignal
 from PyQt6.QtWidgets import (
     QComboBox,
+    QFileDialog,
     QFormLayout,
     QGroupBox,
+    QHBoxLayout,
+    QLabel,
     QLineEdit,
     QListWidget,
     QListWidgetItem,
+    QPushButton,
     QSpinBox,
     QTextEdit,
     QVBoxLayout,
@@ -16,11 +19,8 @@ from PyQt6.QtWidgets import (
 
 
 class QuoteForm(QWidget):
-    quote_inputs_changed = pyqtSignal()
-
     def __init__(self, industries: list[dict]) -> None:
         super().__init__()
-        self._image_paths: list[str] = []
         self._setup_ui(industries)
 
     def _setup_ui(self, industries: list[dict]) -> None:
@@ -42,10 +42,8 @@ class QuoteForm(QWidget):
         self.tier = QComboBox()
         self.tier.addItems(["FREE", "PRO"])
 
-        self.rooms = QSpinBox()
-        self.rooms.setRange(0, 100)
-        self.bathrooms = QSpinBox()
-        self.bathrooms.setRange(0, 100)
+        self.rooms = QSpinBox(); self.rooms.setMinimum(0); self.rooms.setMaximum(100)
+        self.bathrooms = QSpinBox(); self.bathrooms.setMinimum(0); self.bathrooms.setMaximum(100)
         self.client_name = QLineEdit()
         self.client_email = QLineEdit()
         self.scope = QTextEdit()
@@ -53,6 +51,10 @@ class QuoteForm(QWidget):
 
         self.addons = QListWidget()
         self.addons.setSelectionMode(QListWidget.SelectionMode.MultiSelection)
+
+        self.images = QListWidget()
+        self.upload_btn = QPushButton("Upload Images")
+        self.upload_btn.clicked.connect(self._upload_images)
 
         form.addRow("Industry", self.industry)
         form.addRow("Region", self.region)
@@ -64,47 +66,23 @@ class QuoteForm(QWidget):
         form.addRow("Scope", self.scope)
         form.addRow("Client Name", self.client_name)
         form.addRow("Client Email", self.client_email)
+
+        upload_wrap = QHBoxLayout()
+        upload_wrap.addWidget(self.upload_btn)
+        upload_wrap.addWidget(QLabel("Selected Images"))
         root.addWidget(form_box)
-
-        self._connect_signals()
-
-    def _connect_signals(self) -> None:
-        self.industry.currentIndexChanged.connect(self.quote_inputs_changed.emit)
-        self.region.currentIndexChanged.connect(self.quote_inputs_changed.emit)
-        self.urgency.currentIndexChanged.connect(self.quote_inputs_changed.emit)
-        self.tier.currentIndexChanged.connect(self.quote_inputs_changed.emit)
-        self.rooms.valueChanged.connect(self.quote_inputs_changed.emit)
-        self.bathrooms.valueChanged.connect(self.quote_inputs_changed.emit)
-        self.client_name.textChanged.connect(self.quote_inputs_changed.emit)
-        self.client_email.textChanged.connect(self.quote_inputs_changed.emit)
-        self.scope.textChanged.connect(self.quote_inputs_changed.emit)
-        self.addons.itemSelectionChanged.connect(self.quote_inputs_changed.emit)
-
-    def set_images(self, image_paths: list[str]) -> None:
-        self._image_paths = list(image_paths)
-        self.quote_inputs_changed.emit()
-
-    def refresh_industries(self, industries: list[dict]) -> None:
-        current_id = self.industry.currentData()
-        self.industry.blockSignals(True)
-        self.industry.clear()
-        for entry in industries:
-            self.industry.addItem(entry["name"], entry["id"])
-        idx = max(0, self.industry.findData(current_id))
-        self.industry.setCurrentIndex(idx)
-        self.industry.blockSignals(False)
-        self.quote_inputs_changed.emit()
+        root.addLayout(upload_wrap)
+        root.addWidget(self.images)
 
     def set_addons(self, addon_keys: list[str]) -> None:
-        selected = {x.text() for x in self.addons.selectedItems()}
-        self.addons.blockSignals(True)
         self.addons.clear()
         for key in addon_keys:
-            item = QListWidgetItem(key)
-            item.setSelected(key in selected)
-            self.addons.addItem(item)
-        self.addons.blockSignals(False)
-        self.quote_inputs_changed.emit()
+            self.addons.addItem(QListWidgetItem(key))
+
+    def _upload_images(self) -> None:
+        files, _ = QFileDialog.getOpenFileNames(self, "Choose images")
+        for file in files:
+            self.images.addItem(file)
 
     def clear_form(self) -> None:
         self.rooms.setValue(0)
@@ -112,10 +90,10 @@ class QuoteForm(QWidget):
         self.scope.clear()
         self.client_name.clear()
         self.client_email.clear()
-        self._image_paths = []
+        self.images.clear()
         for index in range(self.addons.count()):
-            self.addons.item(index).setSelected(False)
-        self.quote_inputs_changed.emit()
+            item = self.addons.item(index)
+            item.setSelected(False)
 
     def values(self) -> dict:
         return {
@@ -127,7 +105,7 @@ class QuoteForm(QWidget):
             "quantity_fields": {},
             "selected_addons": [x.text() for x in self.addons.selectedItems()],
             "scope_text": self.scope.toPlainText(),
-            "image_paths": list(self._image_paths),
+            "image_paths": [self.images.item(i).text() for i in range(self.images.count())],
             "tier": self.tier.currentText(),
             "client_name": self.client_name.text(),
             "client_email": self.client_email.text(),

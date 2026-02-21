@@ -3,12 +3,12 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from core.constants import industries_dir
+from core.constants import INDUSTRIES_DIR
 
 
 class IndustryRegistry:
     def __init__(self, industries_path: Path | None = None) -> None:
-        self.industries_path = industries_path or industries_dir()
+        self.industries_path = industries_path or INDUSTRIES_DIR
         self._industries: dict[str, dict] = {}
         self._load_all()
 
@@ -16,37 +16,17 @@ class IndustryRegistry:
         if not self.industries_path.exists():
             raise FileNotFoundError(f"Industries directory not found: {self.industries_path}")
 
-        loaded: dict[str, dict] = {}
         for file_path in sorted(self.industries_path.glob("*.json")):
-            if "_versions" in file_path.parts:
-                continue
             with file_path.open("r", encoding="utf-8") as fh:
                 payload = json.load(fh)
             normalized = self._validate_and_normalize(payload, file_path)
-            loaded[normalized["id"]] = normalized
+            self._industries[normalized["id"]] = normalized
 
-        if not loaded:
+        if not self._industries:
             raise ValueError("No industry JSON files found")
-        self._industries = loaded
-
-    def reload(self) -> None:
-        self._load_all()
 
     def _validate_and_normalize(self, data: dict, file_path: Path) -> dict:
-        required = [
-            "id",
-            "name",
-            "currency",
-            "base_rate",
-            "hourly_rate",
-            "inputs",
-            "multipliers",
-            "addons",
-            "tag_rules",
-            "margin_default",
-            "region_modifiers",
-            "urgency_modifiers",
-        ]
+        required = ["id", "name", "currency", "base_rate", "hourly_rate", "inputs", "multipliers", "addons", "tag_rules", "margin_default", "region_modifiers", "urgency_modifiers"]
         for key in required:
             if key not in data:
                 raise ValueError(f"Missing required key '{key}' in {file_path.name}")

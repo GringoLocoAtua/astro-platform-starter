@@ -1,6 +1,6 @@
 {
   "name": "SnapQuote v2",
-  "version": "2.1.0",
+  "version": "2.0.0",
   "python": "3.11",
   "entrypoint": "main.py",
   "features": [
@@ -10,12 +10,7 @@
     "pdf_export_tiering",
     "client_vault",
     "recurring_detector",
-    "region_urgency_modifiers",
-    "live_preview",
-    "photo_tag_confirmation",
-    "pricing_studio_versioning",
-    "settings_branding",
-    "pyinstaller_windows_packaging"
+    "region_urgency_modifiers"
   ],
   "tiering": {
     "FREE": "watermark+footer",
