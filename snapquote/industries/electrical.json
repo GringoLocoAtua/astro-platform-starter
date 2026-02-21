@@ -1,0 +1,14 @@
+{
+  "id": "electrical",
+  "name": "Electrical",
+  "currency": "AUD",
+  "base_rate": 150,
+  "hourly_rate": 95,
+  "inputs": {"rooms": 0},
+  "multipliers": {"rooms_rate": 15},
+  "addons": {"safety_inspection": 80, "switchboard_upgrade": 220},
+  "tag_rules": {"old_wiring": {"type": "multiplier", "value": 1.15, "label": "Old Wiring Complexity"}},
+  "margin_default": 0.2,
+  "region_modifiers": {"DEFAULT": 1.0, "NSW": 1.04, "VIC": 1.03, "NZ": 1.09},
+  "urgency_modifiers": {"standard": 1.0, "urgent": 1.18, "same_day": 1.3}
+}

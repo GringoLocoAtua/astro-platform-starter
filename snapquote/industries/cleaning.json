@@ -1,0 +1,17 @@
+{
+  "id": "cleaning",
+  "name": "Residential Cleaning",
+  "currency": "AUD",
+  "base_rate": 120,
+  "hourly_rate": 70,
+  "inputs": {"rooms": 0, "bathrooms": 0},
+  "multipliers": {"rooms_rate": 25, "bathrooms_rate": 30},
+  "addons": {"oven": 45, "carpet": 55, "window": 35, "fridge": 30},
+  "tag_rules": {
+    "heavy_dirt": {"type": "multiplier", "value": 1.2, "label": "Heavy Dirt Uplift"},
+    "stained_carpet": {"type": "include_addon", "addon": "carpet"}
+  },
+  "margin_default": 0.18,
+  "region_modifiers": {"DEFAULT": 1.0, "NSW": 1.05, "VIC": 1.03, "QLD": 1.0, "NZ": 1.08, "NZ-AUCKLAND": 1.1},
+  "urgency_modifiers": {"standard": 1.0, "urgent": 1.15, "same_day": 1.25}
+}
