@@ -1,3 +1,3 @@
-"""Core package exports."""
+from core.quote_builder import build_quote
 
-__all__: list[str] = []
+__all__ = ["build_quote"]

@@ -5,7 +5,7 @@ from uuid import uuid4
 
 from core.recurring_detector import is_recurring
 from core.region_modifier import resolve_region_multiplier, resolve_urgency_multiplier
-from core.validation import QuoteRequest, QuoteResult, validate_request
+from core.validation import QuoteRequest, QuoteResult, ValidationError, validate_request
 
 
 money = lambda x: round(float(x), 2)
@@ -23,17 +23,17 @@ def calculate_quote(request: QuoteRequest, registry, image_tags: list[str]) -> Q
 
     base_rate = float(industry.get("base_rate", 0.0))
     subtotal += base_rate
-    breakdown.append({"item": "Base Service", "amount": base_rate, "meta": {"group": "Base"}})
+    breakdown.append({"item": "Base Service", "amount": base_rate})
 
     multipliers = industry.get("multipliers", {})
     rooms_amount = request.rooms * float(multipliers.get("rooms_rate", 0.0))
     bathrooms_amount = request.bathrooms * float(multipliers.get("bathrooms_rate", 0.0))
     if rooms_amount:
         subtotal += rooms_amount
-        breakdown.append({"item": "Rooms", "amount": rooms_amount, "meta": {"rooms": request.rooms, "group": "Quantities"}})
+        breakdown.append({"item": "Rooms", "amount": rooms_amount, "meta": {"rooms": request.rooms}})
     if bathrooms_amount:
         subtotal += bathrooms_amount
-        breakdown.append({"item": "Bathrooms", "amount": bathrooms_amount, "meta": {"bathrooms": request.bathrooms, "group": "Quantities"}})
+        breakdown.append({"item": "Bathrooms", "amount": bathrooms_amount, "meta": {"bathrooms": request.bathrooms}})
 
     addons = industry.get("addons", {})
     chosen_addons = set(request.selected_addons)
@@ -41,7 +41,7 @@ def calculate_quote(request: QuoteRequest, registry, image_tags: list[str]) -> Q
         if addon in addons:
             value = float(addons[addon])
             subtotal += value
-            breakdown.append({"item": f"Addon: {addon}", "amount": value, "meta": {"group": "Add-ons"}})
+            breakdown.append({"item": f"Addon: {addon}", "amount": value})
         else:
             assumptions.append(f"Unknown addon ignored: {addon}")
 
@@ -51,7 +51,7 @@ def calculate_quote(request: QuoteRequest, registry, image_tags: list[str]) -> Q
         if tag in addons and tag not in chosen_addons:
             value = float(addons[tag])
             subtotal += value
-            breakdown.append({"item": f"Tag Addon: {tag}", "amount": value, "meta": {"group": "Tag Effects"}})
+            breakdown.append({"item": f"Tag Addon: {tag}", "amount": value})
             chosen_addons.add(tag)
             applied_tag_effects.append(f"included addon {tag}")
         if isinstance(rule, dict):
@@ -61,7 +61,7 @@ def calculate_quote(request: QuoteRequest, registry, image_tags: list[str]) -> Q
                 if addon_name in addons and addon_name not in chosen_addons:
                     value = float(addons[addon_name])
                     subtotal += value
-                    breakdown.append({"item": f"Tag Addon: {addon_name}", "amount": value, "meta": {"group": "Tag Effects"}})
+                    breakdown.append({"item": f"Tag Addon: {addon_name}", "amount": value})
                     chosen_addons.add(addon_name)
                     applied_tag_effects.append(f"included addon {addon_name}")
             elif rtype == "multiplier":
@@ -70,33 +70,28 @@ def calculate_quote(request: QuoteRequest, registry, image_tags: list[str]) -> Q
                 subtotal *= factor
                 uplift = subtotal - pre
                 label = str(rule.get("label", f"Tag Multiplier {tag}"))
-                breakdown.append({"item": label, "amount": uplift, "meta": {"factor": factor, "group": "Tag Effects"}})
+                breakdown.append({"item": label, "amount": uplift, "meta": {"factor": factor}})
                 applied_tag_effects.append(f"multiplied by {factor} for {tag}")
-            elif rtype == "fixed_uplift":
-                uplift = float(rule.get("value", 0.0))
-                subtotal += uplift
-                breakdown.append({"item": str(rule.get("label", f"Tag Uplift {tag}")), "amount": uplift, "meta": {"group": "Tag Effects"}})
-                applied_tag_effects.append(f"fixed uplift {uplift} for {tag}")
 
     region_multiplier = resolve_region_multiplier(industry, request.region)
     subtotal *= region_multiplier
-    breakdown.append({"item": f"Region Modifier ({request.region}) x{region_multiplier}", "amount": 0.0, "meta": {"group": "Modifiers"}})
+    breakdown.append({"item": f"Region Modifier ({request.region}) x{region_multiplier}", "amount": 0.0})
 
     urgency_multiplier = resolve_urgency_multiplier(industry, request.urgency)
     subtotal *= urgency_multiplier
-    breakdown.append({"item": f"Urgency ({request.urgency}) x{urgency_multiplier}", "amount": 0.0, "meta": {"group": "Modifiers"}})
+    breakdown.append({"item": f"Urgency ({request.urgency}) x{urgency_multiplier}", "amount": 0.0})
 
     recurring_discount = 0.0
     if is_recurring(request.scope_text):
         recurring_discount = subtotal * 0.10
         subtotal -= recurring_discount
         discounts += recurring_discount
-        breakdown.append({"item": "Recurring Discount (10%)", "amount": -recurring_discount, "meta": {"group": "Discounts"}})
+        breakdown.append({"item": "Recurring Discount (10%)", "amount": -recurring_discount})
 
     margin_rate = float(request.margin_override if request.margin_override is not None else industry.get("margin_default", 0.0))
     margin_amount = subtotal * margin_rate
     total = subtotal + margin_amount
-    breakdown.append({"item": f"Margin ({margin_rate * 100:.0f}%)", "amount": margin_amount, "meta": {"group": "Margin"}})
+    breakdown.append({"item": f"Margin ({margin_rate * 100:.0f}%)", "amount": margin_amount})
 
     return {
         "quote_id": str(uuid4()),
