@@ -1,0 +1,688 @@
+[
+  {
+    "id": "cleaning_plus",
+    "name": "Cleaning Plus",
+    "group": "Home Services",
+    "icon": "briefcase",
+    "sort": 1
+  },
+  {
+    "id": "window_care",
+    "name": "Window Care",
+    "group": "Home Services",
+    "icon": "briefcase",
+    "sort": 2
+  },
+  {
+    "id": "carpet_refresh",
+    "name": "Carpet Refresh",
+    "group": "Home Services",
+    "icon": "briefcase",
+    "sort": 3
+  },
+  {
+    "id": "pest_shield",
+    "name": "Pest Shield",
+    "group": "Home Services",
+    "icon": "briefcase",
+    "sort": 4
+  },
+  {
+    "id": "pool_maintenance",
+    "name": "Pool Maintenance",
+    "group": "Home Services",
+    "icon": "briefcase",
+    "sort": 5
+  },
+  {
+    "id": "gardening_care",
+    "name": "Gardening Care",
+    "group": "Home Services",
+    "icon": "briefcase",
+    "sort": 6
+  },
+  {
+    "id": "lawn_design",
+    "name": "Lawn Design",
+    "group": "Home Services",
+    "icon": "briefcase",
+    "sort": 7
+  },
+  {
+    "id": "fence_repair",
+    "name": "Fence Repair",
+    "group": "Home Services",
+    "icon": "briefcase",
+    "sort": 8
+  },
+  {
+    "id": "roof_wash",
+    "name": "Roof Wash",
+    "group": "Home Services",
+    "icon": "briefcase",
+    "sort": 9
+  },
+  {
+    "id": "gutter_care",
+    "name": "Gutter Care",
+    "group": "Home Services",
+    "icon": "briefcase",
+    "sort": 10
+  },
+  {
+    "id": "solar_panel_clean",
+    "name": "Solar Panel Clean",
+    "group": "Home Services",
+    "icon": "briefcase",
+    "sort": 11
+  },
+  {
+    "id": "pressure_wash",
+    "name": "Pressure Wash",
+    "group": "Home Services",
+    "icon": "briefcase",
+    "sort": 12
+  },
+  {
+    "id": "electrical_plus",
+    "name": "Electrical Plus",
+    "group": "Trades",
+    "icon": "briefcase",
+    "sort": 13
+  },
+  {
+    "id": "plumbing_plus",
+    "name": "Plumbing Plus",
+    "group": "Trades",
+    "icon": "briefcase",
+    "sort": 14
+  },
+  {
+    "id": "hvac_service",
+    "name": "Hvac Service",
+    "group": "Trades",
+    "icon": "briefcase",
+    "sort": 15
+  },
+  {
+    "id": "appliance_repair",
+    "name": "Appliance Repair",
+    "group": "Trades",
+    "icon": "briefcase",
+    "sort": 16
+  },
+  {
+    "id": "tile_install",
+    "name": "Tile Install",
+    "group": "Trades",
+    "icon": "briefcase",
+    "sort": 17
+  },
+  {
+    "id": "drywall_patch",
+    "name": "Drywall Patch",
+    "group": "Trades",
+    "icon": "briefcase",
+    "sort": 18
+  },
+  {
+    "id": "painting_team",
+    "name": "Painting Team",
+    "group": "Trades",
+    "icon": "briefcase",
+    "sort": 19
+  },
+  {
+    "id": "handyman_pro",
+    "name": "Handyman Pro",
+    "group": "Trades",
+    "icon": "briefcase",
+    "sort": 20
+  },
+  {
+    "id": "locksmith_mobile",
+    "name": "Locksmith Mobile",
+    "group": "Trades",
+    "icon": "briefcase",
+    "sort": 21
+  },
+  {
+    "id": "security_camera_install",
+    "name": "Security Camera Install",
+    "group": "Trades",
+    "icon": "briefcase",
+    "sort": 22
+  },
+  {
+    "id": "smart_home_setup",
+    "name": "Smart Home Setup",
+    "group": "Trades",
+    "icon": "briefcase",
+    "sort": 23
+  },
+  {
+    "id": "garage_door_fix",
+    "name": "Garage Door Fix",
+    "group": "Trades",
+    "icon": "briefcase",
+    "sort": 24
+  },
+  {
+    "id": "bond_clean",
+    "name": "Bond Clean",
+    "group": "Property",
+    "icon": "briefcase",
+    "sort": 25
+  },
+  {
+    "id": "move_in_setup",
+    "name": "Move In Setup",
+    "group": "Property",
+    "icon": "briefcase",
+    "sort": 26
+  },
+  {
+    "id": "property_inspection",
+    "name": "Property Inspection",
+    "group": "Property",
+    "icon": "briefcase",
+    "sort": 27
+  },
+  {
+    "id": "airbnb_turnover",
+    "name": "Airbnb Turnover",
+    "group": "Property",
+    "icon": "briefcase",
+    "sort": 28
+  },
+  {
+    "id": "staging_support",
+    "name": "Staging Support",
+    "group": "Property",
+    "icon": "briefcase",
+    "sort": 29
+  },
+  {
+    "id": "waste_removal",
+    "name": "Waste Removal",
+    "group": "Property",
+    "icon": "briefcase",
+    "sort": 30
+  },
+  {
+    "id": "junk_haul",
+    "name": "Junk Haul",
+    "group": "Property",
+    "icon": "briefcase",
+    "sort": 31
+  },
+  {
+    "id": "storage_pack",
+    "name": "Storage Pack",
+    "group": "Property",
+    "icon": "briefcase",
+    "sort": 32
+  },
+  {
+    "id": "office_relocation",
+    "name": "Office Relocation",
+    "group": "Property",
+    "icon": "briefcase",
+    "sort": 33
+  },
+  {
+    "id": "strata_common_clean",
+    "name": "Strata Common Clean",
+    "group": "Property",
+    "icon": "briefcase",
+    "sort": 34
+  },
+  {
+    "id": "mobile_detailing",
+    "name": "Mobile Detailing",
+    "group": "Automotive",
+    "icon": "briefcase",
+    "sort": 35
+  },
+  {
+    "id": "fleet_wash",
+    "name": "Fleet Wash",
+    "group": "Automotive",
+    "icon": "briefcase",
+    "sort": 36
+  },
+  {
+    "id": "tyre_service",
+    "name": "Tyre Service",
+    "group": "Automotive",
+    "icon": "briefcase",
+    "sort": 37
+  },
+  {
+    "id": "battery_replace",
+    "name": "Battery Replace",
+    "group": "Automotive",
+    "icon": "briefcase",
+    "sort": 38
+  },
+  {
+    "id": "windscreen_chip",
+    "name": "Windscreen Chip",
+    "group": "Automotive",
+    "icon": "briefcase",
+    "sort": 39
+  },
+  {
+    "id": "interior_sanitize",
+    "name": "Interior Sanitize",
+    "group": "Automotive",
+    "icon": "briefcase",
+    "sort": 40
+  },
+  {
+    "id": "paint_protect",
+    "name": "Paint Protect",
+    "group": "Automotive",
+    "icon": "briefcase",
+    "sort": 41
+  },
+  {
+    "id": "motorbike_detail",
+    "name": "Motorbike Detail",
+    "group": "Automotive",
+    "icon": "briefcase",
+    "sort": 42
+  },
+  {
+    "id": "caravan_service",
+    "name": "Caravan Service",
+    "group": "Automotive",
+    "icon": "briefcase",
+    "sort": 43
+  },
+  {
+    "id": "boat_detail",
+    "name": "Boat Detail",
+    "group": "Automotive",
+    "icon": "briefcase",
+    "sort": 44
+  },
+  {
+    "id": "office_clean",
+    "name": "Office Clean",
+    "group": "Business",
+    "icon": "briefcase",
+    "sort": 45
+  },
+  {
+    "id": "retail_reset",
+    "name": "Retail Reset",
+    "group": "Business",
+    "icon": "briefcase",
+    "sort": 46
+  },
+  {
+    "id": "hospitality_sanitize",
+    "name": "Hospitality Sanitize",
+    "group": "Business",
+    "icon": "briefcase",
+    "sort": 47
+  },
+  {
+    "id": "warehouse_sweep",
+    "name": "Warehouse Sweep",
+    "group": "Business",
+    "icon": "briefcase",
+    "sort": 48
+  },
+  {
+    "id": "event_cleanup",
+    "name": "Event Cleanup",
+    "group": "Business",
+    "icon": "briefcase",
+    "sort": 49
+  },
+  {
+    "id": "post_construction",
+    "name": "Post Construction",
+    "group": "Business",
+    "icon": "briefcase",
+    "sort": 50
+  },
+  {
+    "id": "it_support_visit",
+    "name": "It Support Visit",
+    "group": "Business",
+    "icon": "briefcase",
+    "sort": 51
+  },
+  {
+    "id": "network_setup",
+    "name": "Network Setup",
+    "group": "Business",
+    "icon": "briefcase",
+    "sort": 52
+  },
+  {
+    "id": "printer_maintenance",
+    "name": "Printer Maintenance",
+    "group": "Business",
+    "icon": "briefcase",
+    "sort": 53
+  },
+  {
+    "id": "facility_management",
+    "name": "Facility Management",
+    "group": "Business",
+    "icon": "briefcase",
+    "sort": 54
+  },
+  {
+    "id": "pet_groom_mobile",
+    "name": "Pet Groom Mobile",
+    "group": "Wellness",
+    "icon": "briefcase",
+    "sort": 55
+  },
+  {
+    "id": "pet_waste_cleanup",
+    "name": "Pet Waste Cleanup",
+    "group": "Wellness",
+    "icon": "briefcase",
+    "sort": 56
+  },
+  {
+    "id": "home_care_visit",
+    "name": "Home Care Visit",
+    "group": "Wellness",
+    "icon": "briefcase",
+    "sort": 57
+  },
+  {
+    "id": "meal_prep_service",
+    "name": "Meal Prep Service",
+    "group": "Wellness",
+    "icon": "briefcase",
+    "sort": 58
+  },
+  {
+    "id": "elderly_support",
+    "name": "Elderly Support",
+    "group": "Wellness",
+    "icon": "briefcase",
+    "sort": 59
+  },
+  {
+    "id": "childcare_evening",
+    "name": "Childcare Evening",
+    "group": "Wellness",
+    "icon": "briefcase",
+    "sort": 60
+  },
+  {
+    "id": "personal_training_home",
+    "name": "Personal Training Home",
+    "group": "Wellness",
+    "icon": "briefcase",
+    "sort": 61
+  },
+  {
+    "id": "yoga_private",
+    "name": "Yoga Private",
+    "group": "Wellness",
+    "icon": "briefcase",
+    "sort": 62
+  },
+  {
+    "id": "massage_mobile",
+    "name": "Massage Mobile",
+    "group": "Wellness",
+    "icon": "briefcase",
+    "sort": 63
+  },
+  {
+    "id": "spa_setup",
+    "name": "Spa Setup",
+    "group": "Wellness",
+    "icon": "briefcase",
+    "sort": 64
+  },
+  {
+    "id": "photography_session",
+    "name": "Photography Session",
+    "group": "Creative",
+    "icon": "briefcase",
+    "sort": 65
+  },
+  {
+    "id": "videography_basic",
+    "name": "Videography Basic",
+    "group": "Creative",
+    "icon": "briefcase",
+    "sort": 66
+  },
+  {
+    "id": "drone_inspection",
+    "name": "Drone Inspection",
+    "group": "Creative",
+    "icon": "briefcase",
+    "sort": 67
+  },
+  {
+    "id": "graphic_design_hourly",
+    "name": "Graphic Design Hourly",
+    "group": "Creative",
+    "icon": "briefcase",
+    "sort": 68
+  },
+  {
+    "id": "web_refresh",
+    "name": "Web Refresh",
+    "group": "Creative",
+    "icon": "briefcase",
+    "sort": 69
+  },
+  {
+    "id": "social_media_pack",
+    "name": "Social Media Pack",
+    "group": "Creative",
+    "icon": "briefcase",
+    "sort": 70
+  },
+  {
+    "id": "branding_workshop",
+    "name": "Branding Workshop",
+    "group": "Creative",
+    "icon": "briefcase",
+    "sort": 71
+  },
+  {
+    "id": "copywriting_bundle",
+    "name": "Copywriting Bundle",
+    "group": "Creative",
+    "icon": "briefcase",
+    "sort": 72
+  },
+  {
+    "id": "podcast_edit",
+    "name": "Podcast Edit",
+    "group": "Creative",
+    "icon": "briefcase",
+    "sort": 73
+  },
+  {
+    "id": "voiceover_service",
+    "name": "Voiceover Service",
+    "group": "Creative",
+    "icon": "briefcase",
+    "sort": 74
+  },
+  {
+    "id": "tree_trimming",
+    "name": "Tree Trimming",
+    "group": "Outdoor",
+    "icon": "briefcase",
+    "sort": 75
+  },
+  {
+    "id": "landscape_install",
+    "name": "Landscape Install",
+    "group": "Outdoor",
+    "icon": "briefcase",
+    "sort": 76
+  },
+  {
+    "id": "irrigation_tuneup",
+    "name": "Irrigation Tuneup",
+    "group": "Outdoor",
+    "icon": "briefcase",
+    "sort": 77
+  },
+  {
+    "id": "deck_restoration",
+    "name": "Deck Restoration",
+    "group": "Outdoor",
+    "icon": "briefcase",
+    "sort": 78
+  },
+  {
+    "id": "patio_clean",
+    "name": "Patio Clean",
+    "group": "Outdoor",
+    "icon": "briefcase",
+    "sort": 79
+  },
+  {
+    "id": "outdoor_lighting",
+    "name": "Outdoor Lighting",
+    "group": "Outdoor",
+    "icon": "briefcase",
+    "sort": 80
+  },
+  {
+    "id": "bbq_clean",
+    "name": "Bbq Clean",
+    "group": "Outdoor",
+    "icon": "briefcase",
+    "sort": 81
+  },
+  {
+    "id": "shed_assembly",
+    "name": "Shed Assembly",
+    "group": "Outdoor",
+    "icon": "briefcase",
+    "sort": 82
+  },
+  {
+    "id": "playground_install",
+    "name": "Playground Install",
+    "group": "Outdoor",
+    "icon": "briefcase",
+    "sort": 83
+  },
+  {
+    "id": "pool_fence_cert",
+    "name": "Pool Fence Cert",
+    "group": "Outdoor",
+    "icon": "briefcase",
+    "sort": 84
+  },
+  {
+    "id": "site_safety_audit",
+    "name": "Site Safety Audit",
+    "group": "Industrial",
+    "icon": "briefcase",
+    "sort": 85
+  },
+  {
+    "id": "equipment_clean",
+    "name": "Equipment Clean",
+    "group": "Industrial",
+    "icon": "briefcase",
+    "sort": 86
+  },
+  {
+    "id": "factory_maintenance",
+    "name": "Factory Maintenance",
+    "group": "Industrial",
+    "icon": "briefcase",
+    "sort": 87
+  },
+  {
+    "id": "machine_lubrication",
+    "name": "Machine Lubrication",
+    "group": "Industrial",
+    "icon": "briefcase",
+    "sort": 88
+  },
+  {
+    "id": "forklift_service",
+    "name": "Forklift Service",
+    "group": "Industrial",
+    "icon": "briefcase",
+    "sort": 89
+  },
+  {
+    "id": "industrial_paint",
+    "name": "Industrial Paint",
+    "group": "Industrial",
+    "icon": "briefcase",
+    "sort": 90
+  },
+  {
+    "id": "spill_response",
+    "name": "Spill Response",
+    "group": "Industrial",
+    "icon": "briefcase",
+    "sort": 91
+  },
+  {
+    "id": "hazmat_packaging",
+    "name": "Hazmat Packaging",
+    "group": "Industrial",
+    "icon": "briefcase",
+    "sort": 92
+  },
+  {
+    "id": "cold_room_service",
+    "name": "Cold Room Service",
+    "group": "Industrial",
+    "icon": "briefcase",
+    "sort": 93
+  },
+  {
+    "id": "power_backup_test",
+    "name": "Power Backup Test",
+    "group": "Industrial",
+    "icon": "briefcase",
+    "sort": 94
+  },
+  {
+    "id": "cleaning",
+    "name": "Residential Cleaning",
+    "group": "Home Services",
+    "icon": "star",
+    "sort": 95
+  },
+  {
+    "id": "generic",
+    "name": "Generic Services",
+    "group": "Business",
+    "icon": "star",
+    "sort": 96
+  },
+  {
+    "id": "electrical",
+    "name": "Electrical",
+    "group": "Trades",
+    "icon": "star",
+    "sort": 97
+  },
+  {
+    "id": "plumbing",
+    "name": "Plumbing",
+    "group": "Trades",
+    "icon": "star",
+    "sort": 98
+  }
+]
