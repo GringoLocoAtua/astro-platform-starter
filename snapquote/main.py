@@ -1,15 +1,15 @@
 from __future__ import annotations
 
 import sys
-from pathlib import Path
 
 from PyQt6.QtWidgets import QApplication
 
+from core.constants import data_dir
 from ui.main_window import MainWindow
 
 
 def ensure_data_dir() -> None:
-    Path(__file__).resolve().parent.joinpath("data").mkdir(parents=True, exist_ok=True)
+    data_dir().mkdir(parents=True, exist_ok=True)
 
 
 def main() -> int:
