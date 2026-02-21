@@ -1,13 +1,13 @@
-# SnapQuote v2.1 (PRO PREMIUM DESKTOP)
+# SnapQuote v2
 
-SnapQuote v2.1 is an offline-first desktop quoting app with modular pricing JSON, live quote preview, photo tag confirmation, pricing studio versioning, and optional local web blueprint.
+SnapQuote v2 is an offline-first desktop quoting app with modular pricing JSON, a pure pricing engine, PDF export, and optional local web blueprint.
 
 ## Setup
 
 ```bash
 cd snapquote
-python -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
+python3 -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
@@ -17,7 +17,7 @@ pip install -r requirements.txt
 python main.py
 ```
 
-Helper scripts:
+Or use helper scripts:
 - macOS/Linux: `./start.sh`
 - Windows: `start.bat`
 
@@ -27,21 +27,11 @@ Helper scripts:
 pytest -q
 ```
 
-## Desktop v2.1 highlights
-
-- Live quote preview with 350ms debounce.
-- Photo panel with thumbnails, detected tags, confirmation checkboxes, and manual tags.
-- Pricing Studio tab with versioning (`industries/_versions/<industry_id>/`) and live registry reload.
-- Settings tab persisted in `data/settings.json`.
-- PDF export:
-  - FREE: watermark + `Powered by BU1ST SnapQuote™` footer (unchanged).
-  - PRO: optional branding logo and optional footer (default off).
-
 ## Optional web backend
 
 ```bash
 cd web/backend
-python -m venv .venv
+python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 uvicorn app:app --reload
@@ -55,17 +45,15 @@ npm install
 npm run dev
 ```
 
-## Build Windows executable (PyInstaller)
-
-```powershell
-cd snapquote
-powershell -ExecutionPolicy Bypass -File .\package\build_windows.ps1
-```
-
-Output app is generated in `dist/SnapQuote/`.
-
 ## Offline and AI notes
 
 - Desktop mode works fully offline.
 - Optional Ollama integration exists in `ai/ai_bridge.py`; when unavailable it safely returns empty suggestions.
 - `assets/logo.png` is a placeholder text file in this scaffold; replacing it with a real PNG is optional.
+
+## Dist zip instructions
+
+```bash
+cd ..
+zip -r dist/snapquote-v2.zip snapquote
+```
