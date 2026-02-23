@@ -90,9 +90,7 @@ class ResultsPanel(QWidget):
             self.total_sub.setText(str(quote.get("error", "Unknown error")))
             return
 
-        currency = quote.get('display_currency', quote.get('currency', 'AUD'))
-        amount = quote.get('display_total', quote.get('total', 0))
-        self.total.setText(f"{currency} {amount:.2f}")
+        self.total.setText(f"{quote.get('currency', 'AUD')} {quote.get('total', 0):.2f}")
         self.total_sub.setText("Total incl. margin")
 
         grouped: dict[str, list[dict]] = {}

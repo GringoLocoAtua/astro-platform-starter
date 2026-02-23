@@ -1,6 +1,6 @@
 {
   "name": "SnapQuote v2",
-  "version": "2.2.0",
+  "version": "2.1.0",
   "python": "3.11",
   "entrypoint": "main.py",
   "features": [
@@ -15,10 +15,7 @@
     "photo_tag_confirmation",
     "pricing_studio_versioning",
     "settings_branding",
-    "offline_login",
-    "i18n_en_es",
-    "multi_currency",
-    "industry_pack_80_plus"
+    "pyinstaller_windows_packaging"
   ],
   "tiering": {
     "FREE": "watermark+footer",

@@ -12,19 +12,19 @@ from core.constants import DATA_DIR, SESSION_PATH, USERS_PATH
 def _ensure() -> None:
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     if not USERS_PATH.exists():
-        USERS_PATH.write_text(json.dumps({"users": []}, indent=2), encoding="utf-8-sig")
+        USERS_PATH.write_text(json.dumps({"users": []}, indent=2), encoding="utf-8")
 
 
 def _load_users() -> dict:
     _ensure()
     try:
-        return json.loads(USERS_PATH.read_text(encoding="utf-8-sig"))
+        return json.loads(USERS_PATH.read_text(encoding="utf-8"))
     except json.JSONDecodeError:
         return {"users": []}
 
 
 def _save_users(payload: dict) -> None:
-    USERS_PATH.write_text(json.dumps(payload, indent=2), encoding="utf-8-sig")
+    USERS_PATH.write_text(json.dumps(payload, indent=2), encoding="utf-8")
 
 
 def has_users() -> bool:
@@ -63,14 +63,14 @@ def verify_user(username: str, password: str) -> bool:
 
 
 def save_session(username: str) -> None:
-    SESSION_PATH.write_text(json.dumps({"username": username, "last_active": datetime.utcnow().isoformat()}), encoding="utf-8-sig")
+    SESSION_PATH.write_text(json.dumps({"username": username, "last_active": datetime.utcnow().isoformat()}), encoding="utf-8")
 
 
 def load_session() -> dict:
     if not SESSION_PATH.exists():
         return {}
     try:
-        return json.loads(SESSION_PATH.read_text(encoding="utf-8-sig"))
+        return json.loads(SESSION_PATH.read_text(encoding="utf-8"))
     except json.JSONDecodeError:
         return {}
 

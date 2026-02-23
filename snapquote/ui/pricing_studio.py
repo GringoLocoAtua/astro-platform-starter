@@ -162,7 +162,6 @@ class PricingStudio(QWidget):
         self._set_map_rows(self.addons, data.get("addons", {}))
         self._set_tag_rule_rows(data.get("tag_rules", {}))
         self.refresh_versions(industry_id)
-        self.active_industry_changed.emit()
 
     def _read_map_table(self, table: QTableWidget) -> dict:
         out = {}

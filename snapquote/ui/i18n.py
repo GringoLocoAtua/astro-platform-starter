@@ -20,7 +20,7 @@ class I18N:
         if not path.exists():
             self._cache[language] = {}
             return {}
-        data = json.loads(path.read_text(encoding="utf-8-sig"))
+        data = json.loads(path.read_text(encoding="utf-8"))
         self._cache[language] = data
         return data
 

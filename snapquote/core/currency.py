@@ -26,14 +26,14 @@ def load_cached_rates() -> dict:
     if not RATES_PATH.exists():
         return {}
     try:
-        return json.loads(RATES_PATH.read_text(encoding="utf-8-sig"))
+        return json.loads(RATES_PATH.read_text(encoding="utf-8"))
     except json.JSONDecodeError:
         return {}
 
 
 def save_rates(base: str, rates: dict[str, float]) -> None:
     payload = {"base": base, "rates": rates, "timestamp": datetime.now(timezone.utc).isoformat()}
-    RATES_PATH.write_text(json.dumps(payload, indent=2), encoding="utf-8-sig")
+    RATES_PATH.write_text(json.dumps(payload, indent=2), encoding="utf-8")
 
 
 def fetch_rates(base: str = "AUD") -> dict[str, float]:

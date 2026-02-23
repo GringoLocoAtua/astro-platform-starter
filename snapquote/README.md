@@ -1,55 +1,59 @@
-# SnapQuote v2.2 (Marketplace-Grade)
+# SnapQuote v2
 
-SnapQuote is an offline-first desktop quoting app with modular pricing, local auth, 80+ industries, live preview, photo tag confirmation, pricing studio, i18n, and multi-currency display.
+SnapQuote v2 is an offline-first desktop quoting app with modular pricing JSON, a pure pricing engine, PDF export, and optional local web blueprint.
 
-## Setup (Windows PowerShell)
-
-```powershell
-cd snapquote
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-```
-
-## Setup (macOS/Linux)
+## Setup
 
 ```bash
 cd snapquote
-python -m venv .venv
+python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-## Run Desktop
+## Run desktop
 
 ```bash
 python main.py
 ```
 
-## Run Tests
+Or use helper scripts:
+- macOS/Linux: `./start.sh`
+- Windows: `start.bat`
+
+## Run tests
 
 ```bash
-python -m pytest -q
+pytest -q
 ```
 
-## Offline-first notes
+## Optional web backend
 
-- Login is fully local (`data/users.json`), no internet required.
-- Currency rates use cached `data/rates.json`; if network is unavailable, app continues in base currency.
-- Industry pack auto-seeds from `industries/_catalog.json` and preserves customized industry JSON files.
+```bash
+cd web/backend
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+uvicorn app:app --reload
+```
 
-## Settings overview
+## Optional web frontend
 
-- Language: English / Spanish
-- Currency: AUD, NZD, USD, EUR, GBP, CLP
-- Branding + logo for PRO PDFs
-- Security toggle for login requirement + auto-lock minutes
-- PDF controls for watermark/footer behavior by tier
+```bash
+cd web/frontend
+npm install
+npm run dev
+```
 
-## Windows cleanup tip
+## Offline and AI notes
 
-Use PowerShell-native removal commands:
+- Desktop mode works fully offline.
+- Optional Ollama integration exists in `ai/ai_bridge.py`; when unavailable it safely returns empty suggestions.
+- `assets/logo.png` is a placeholder text file in this scaffold; replacing it with a real PNG is optional.
 
-```powershell
-Remove-Item -Recurse -Force .\dist, .\build
+## Dist zip instructions
+
+```bash
+cd ..
+zip -r dist/snapquote-v2.zip snapquote
 ```
