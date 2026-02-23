@@ -3,6 +3,8 @@ from __future__ import annotations
 from PyQt6.QtCore import pyqtSignal
 from PyQt6.QtWidgets import (
     QFormLayout,
+    QGridLayout,
+    QHBoxLayout,
     QLineEdit,
     QScrollArea,
     QSpinBox,
@@ -22,7 +24,6 @@ class QuoteForm(QWidget):
         super().__init__()
         self._image_paths: list[str] = []
         self._addon_chips: dict[str, ChipButton] = {}
-        self._show_room_fields = True
         self._setup_ui(industries)
 
     def _setup_ui(self, industries: list[dict]) -> None:
@@ -40,23 +41,18 @@ class QuoteForm(QWidget):
 
         basics = Card()
         basics.content_layout.addWidget(SectionHeader("Job Basics", "Core details for accurate pricing"))
-        self.basics_form = QFormLayout()
-
-        self.rooms = QSpinBox()
-        self.rooms.setRange(0, 100)
-        self.bathrooms = QSpinBox()
-        self.bathrooms.setRange(0, 100)
-        self.scope = QTextEdit()
-        self.scope.setPlaceholderText("Describe scope and outcomes...")
-        self.basics_form.addRow("Rooms", self.rooms)
-        self.basics_form.addRow("Bathrooms", self.bathrooms)
-        self.basics_form.addRow("Scope", self.scope)
-        basics.content_layout.addLayout(self.basics_form)
+        basics_form = QFormLayout()
+        self.rooms = QSpinBox(); self.rooms.setRange(0, 100)
+        self.bathrooms = QSpinBox(); self.bathrooms.setRange(0, 100)
+        self.scope = QTextEdit(); self.scope.setPlaceholderText("Describe scope and outcomes...")
+        basics_form.addRow("Rooms", self.rooms)
+        basics_form.addRow("Bathrooms", self.bathrooms)
+        basics_form.addRow("Scope", self.scope)
+        basics.content_layout.addLayout(basics_form)
 
         addons = Card()
         addons.content_layout.addWidget(SectionHeader("Add-ons", "Select optional services"))
-        self.addon_search = QLineEdit()
-        self.addon_search.setPlaceholderText("Search add-ons...")
+        self.addon_search = QLineEdit(); self.addon_search.setPlaceholderText("Search add-ons...")
         addons.content_layout.addWidget(self.addon_search)
         chip_holder = QWidget()
         self.addon_flow = FlowLayout(chip_holder, h_spacing=8, v_spacing=8)
@@ -95,15 +91,6 @@ class QuoteForm(QWidget):
         self.region.textChanged.connect(self.inputs_changed.emit)
         self.urgency.textChanged.connect(self.inputs_changed.emit)
         self.tier.textChanged.connect(self.inputs_changed.emit)
-
-    def set_cleaning_mode(self, enabled: bool) -> None:
-        self._show_room_fields = enabled
-        self.basics_form.setRowVisible(self.rooms, enabled)
-        self.basics_form.setRowVisible(self.bathrooms, enabled)
-        if not enabled:
-            self.rooms.setValue(0)
-            self.bathrooms.setValue(0)
-        self.inputs_changed.emit()
 
     def _filter_addons(self) -> None:
         term = self.addon_search.text().strip().lower()
@@ -164,8 +151,8 @@ class QuoteForm(QWidget):
             "industry_id": self.industry_id_value,
             "region": self.region.text().strip() or "DEFAULT",
             "urgency": self.urgency.text().strip() or "standard",
-            "rooms": self.rooms.value() if self._show_room_fields else 0,
-            "bathrooms": self.bathrooms.value() if self._show_room_fields else 0,
+            "rooms": self.rooms.value(),
+            "bathrooms": self.bathrooms.value(),
             "quantity_fields": {},
             "selected_addons": [k for k, chip in self._addon_chips.items() if chip.isChecked()],
             "scope_text": self.scope.toPlainText(),

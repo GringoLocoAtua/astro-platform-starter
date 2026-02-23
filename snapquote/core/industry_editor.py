@@ -46,7 +46,7 @@ def save_version(industry_id: str, data: dict) -> Path:
     validate_industry(data)
     stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     path = _version_dir(industry_id) / f"{stamp}.json"
-    path.write_text(json.dumps(data, indent=2), encoding="utf-8-sig")
+    path.write_text(json.dumps(data, indent=2), encoding="utf-8")
     return path
 
 
@@ -60,11 +60,11 @@ def set_active(industry_id: str, data_or_version_path: dict | str | Path) -> Pat
     if isinstance(data_or_version_path, dict):
         data = data_or_version_path
     else:
-        data = json.loads(Path(data_or_version_path).read_text(encoding="utf-8-sig"))
+        data = json.loads(Path(data_or_version_path).read_text(encoding="utf-8"))
     validate_industry(data)
     if active_path.exists():
-        save_version(industry_id, json.loads(active_path.read_text(encoding="utf-8-sig")))
-    active_path.write_text(json.dumps(data, indent=2), encoding="utf-8-sig")
+        save_version(industry_id, json.loads(active_path.read_text(encoding="utf-8")))
+    active_path.write_text(json.dumps(data, indent=2), encoding="utf-8")
     return active_path
 
 

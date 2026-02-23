@@ -33,9 +33,9 @@ def ensure_industry_pack() -> None:
     catalog_path = INDUSTRIES_DIR / "_catalog.json"
     if not catalog_path.exists():
         return
-    catalog = json.loads(catalog_path.read_text(encoding="utf-8-sig"))
+    catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
     for entry in catalog:
         fp = INDUSTRIES_DIR / f"{entry['id']}.json"
         if fp.exists():
             continue
-        fp.write_text(json.dumps(_default_industry(entry), indent=2), encoding="utf-8-sig")
+        fp.write_text(json.dumps(_default_industry(entry), indent=2), encoding="utf-8")

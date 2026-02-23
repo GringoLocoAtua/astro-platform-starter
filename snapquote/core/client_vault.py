@@ -9,13 +9,13 @@ from core.constants import CLIENT_VAULT_PATH, DATA_DIR
 def _ensure_store() -> None:
     DATA_DIR.mkdir(parents=True, exist_ok=True)
     if not CLIENT_VAULT_PATH.exists():
-        CLIENT_VAULT_PATH.write_text("{}", encoding="utf-8-sig")
+        CLIENT_VAULT_PATH.write_text("{}", encoding="utf-8")
 
 
 def _read_store() -> dict:
     _ensure_store()
     try:
-        return json.loads(CLIENT_VAULT_PATH.read_text(encoding="utf-8-sig"))
+        return json.loads(CLIENT_VAULT_PATH.read_text(encoding="utf-8"))
     except json.JSONDecodeError:
         return {}
 
@@ -28,7 +28,7 @@ def save_quote(client_name: str, quote_result: dict) -> None:
     payload = dict(quote_result)
     payload["saved_at"] = datetime.now(timezone.utc).isoformat()
     store[client_name].append(payload)
-    CLIENT_VAULT_PATH.write_text(json.dumps(store, indent=2), encoding="utf-8-sig")
+    CLIENT_VAULT_PATH.write_text(json.dumps(store, indent=2), encoding="utf-8")
 
 
 def get_client_history(client_name: str) -> list[dict]:
