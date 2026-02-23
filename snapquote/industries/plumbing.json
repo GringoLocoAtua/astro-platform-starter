@@ -1,0 +1,14 @@
+{
+  "id": "plumbing",
+  "name": "Plumbing",
+  "currency": "AUD",
+  "base_rate": 140,
+  "hourly_rate": 90,
+  "inputs": {"bathrooms": 0},
+  "multipliers": {"bathrooms_rate": 20},
+  "addons": {"drain_clean": 110, "camera_inspection": 140},
+  "tag_rules": {"blocked_drain": {"type": "include_addon", "addon": "drain_clean"}},
+  "margin_default": 0.17,
+  "region_modifiers": {"DEFAULT": 1.0, "NSW": 1.03, "VIC": 1.02, "NZ": 1.08},
+  "urgency_modifiers": {"standard": 1.0, "urgent": 1.16, "same_day": 1.28}
+}

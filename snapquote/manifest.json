@@ -1,0 +1,27 @@
+{
+  "name": "SnapQuote v2",
+  "version": "2.2.0",
+  "python": "3.11",
+  "entrypoint": "main.py",
+  "features": [
+    "industry_registry",
+    "pricing_engine_v2",
+    "image_tagging_stub",
+    "pdf_export_tiering",
+    "client_vault",
+    "recurring_detector",
+    "region_urgency_modifiers",
+    "live_preview",
+    "photo_tag_confirmation",
+    "pricing_studio_versioning",
+    "settings_branding",
+    "offline_login",
+    "i18n_en_es",
+    "multi_currency",
+    "industry_pack_80_plus"
+  ],
+  "tiering": {
+    "FREE": "watermark+footer",
+    "PRO": "no_watermark+white_label_footer_toggle"
+  }
+}
