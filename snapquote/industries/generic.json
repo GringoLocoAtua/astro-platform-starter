@@ -1,0 +1,14 @@
+{
+  "id": "generic",
+  "name": "Generic Services",
+  "currency": "AUD",
+  "base_rate": 100,
+  "hourly_rate": 60,
+  "inputs": {},
+  "multipliers": {},
+  "addons": {"materials": 40},
+  "tag_rules": {},
+  "margin_default": 0.15,
+  "region_modifiers": {"DEFAULT": 1.0, "NSW": 1.02, "VIC": 1.01, "NZ": 1.07},
+  "urgency_modifiers": {"standard": 1.0, "urgent": 1.1, "same_day": 1.2}
+}
