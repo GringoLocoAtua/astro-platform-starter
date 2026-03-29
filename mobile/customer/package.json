@@ -1,0 +1,10 @@
+{
+  "name": "@bu1st/mobile-customer",
+  "private": true,
+  "main": "src/app/App.tsx",
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-native": "^0.75.0",
+    "zustand": "^5.0.0"
+  }
+}
