@@ -1,0 +1,28 @@
+{
+  "suburbs": [
+    { "name": "Bondi", "postcode": "2026", "travelFeeCents": 500, "launchEnabled": true },
+    { "name": "Surry Hills", "postcode": "2010", "travelFeeCents": 300, "launchEnabled": true },
+    { "name": "Parramatta", "postcode": "2150", "travelFeeCents": 800, "launchEnabled": true }
+  ],
+  "packages": [
+    { "name": "Quick Exterior", "basePriceCents": 4900 },
+    { "name": "Exterior + Vacuum", "basePriceCents": 6900 },
+    { "name": "Full Inside & Out", "basePriceCents": 9900 },
+    { "name": "Premium Detail", "basePriceCents": 14900 }
+  ],
+  "addons": [
+    { "name": "Pet hair removal", "priceCents": 2200 },
+    { "name": "Stain spot clean", "priceCents": 1900 },
+    { "name": "Tyre shine", "priceCents": 1200 },
+    { "name": "Spray wax", "priceCents": 2600 },
+    { "name": "Interior deodorise", "priceCents": 1400 },
+    { "name": "Child seat clean", "priceCents": 1800 },
+    { "name": "Boot clean", "priceCents": 1100 }
+  ],
+  "fleetAccount": {
+    "legalName": "Harbour Clinical Group",
+    "abn": "63 820 554 021",
+    "sites": ["Bondi Junction", "Zetland"],
+    "vehicleCount": 12
+  }
+}

@@ -1,0 +1,310 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum UserRole {
+  CUSTOMER
+  WASHER
+  ADMIN
+  FLEET_MANAGER
+}
+
+enum BookingStatus {
+  REQUESTED
+  ACCEPTED
+  ON_THE_WAY
+  ARRIVED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  DISPUTED
+}
+
+enum WasherTrainingStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+}
+
+model User {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  phone       String?
+  passwordHash String
+  role        UserRole
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  customer    Customer?
+  washer      Washer?
+  admin       Admin?
+}
+
+model Customer {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  firstName   String
+  lastName    String
+  creditsCents Int     @default(0)
+  user        User     @relation(fields: [userId], references: [id])
+  vehicles    Vehicle[]
+  addresses   Address[]
+  bookings    Booking[]
+  reviews     Review[]
+}
+
+model Washer {
+  id                   String   @id @default(cuid())
+  userId               String   @unique
+  displayName          String
+  abn                  String?
+  verified             Boolean  @default(false)
+  trainingStatus       WasherTrainingStatus @default(NOT_STARTED)
+  completionScore      Float    @default(0)
+  latenessRate         Float    @default(0)
+  cancellationRate     Float    @default(0)
+  suspended            Boolean  @default(false)
+  jobsCompleted        Int      @default(0)
+  ratingAverage        Float    @default(0)
+  ratingCount          Int      @default(0)
+  user                 User     @relation(fields: [userId], references: [id])
+  bookings             Booking[]
+  payouts              Payout[]
+}
+
+model Admin {
+  id        String @id @default(cuid())
+  userId    String @unique
+  fullName  String
+  user      User   @relation(fields: [userId], references: [id])
+}
+
+model ServiceZone {
+  id             String @id @default(cuid())
+  suburb         String
+  state          String
+  postcode       String
+  launchEnabled  Boolean @default(false)
+  travelFeeCents Int @default(0)
+  bookings       Booking[]
+  addresses      Address[]
+}
+
+model Address {
+  id            String @id @default(cuid())
+  customerId    String
+  serviceZoneId String
+  label         String
+  line1         String
+  suburb        String
+  state         String
+  postcode      String
+  lat           Float
+  lng           Float
+  customer      Customer @relation(fields: [customerId], references: [id])
+  serviceZone   ServiceZone @relation(fields: [serviceZoneId], references: [id])
+}
+
+model Vehicle {
+  id          String @id @default(cuid())
+  customerId  String
+  make        String
+  model       String
+  bodyType    String
+  sizeTier    String
+  condition   String
+  notes       String?
+  customer    Customer @relation(fields: [customerId], references: [id])
+  bookings    BookingVehicle[]
+}
+
+model ServicePackage {
+  id                       String @id @default(cuid())
+  name                     String
+  description              String
+  basePriceCents           Int
+  estimatedMinutes         Int
+  availableForSubscription Boolean @default(false)
+  bookings                 Booking[]
+}
+
+model AddOn {
+  id            String @id @default(cuid())
+  name          String
+  priceCents    Int
+  active        Boolean @default(true)
+  bookingAddOns BookingAddOn[]
+}
+
+model Booking {
+  id                String @id @default(cuid())
+  customerId        String
+  washerId          String?
+  serviceZoneId     String
+  servicePackageId  String
+  status            BookingStatus @default(REQUESTED)
+  scheduledAt       DateTime
+  subtotalCents     Int
+  discountCents     Int @default(0)
+  gstCents          Int
+  totalCents        Int
+  notes             String?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  customer          Customer @relation(fields: [customerId], references: [id])
+  washer            Washer? @relation(fields: [washerId], references: [id])
+  serviceZone       ServiceZone @relation(fields: [serviceZoneId], references: [id])
+  servicePackage    ServicePackage @relation(fields: [servicePackageId], references: [id])
+  vehicles          BookingVehicle[]
+  addOns            BookingAddOn[]
+  events            BookingStatusEvent[]
+  proofPhotos       BookingPhoto[]
+  invoice           Invoice?
+  dispute           Dispute?
+}
+
+model BookingVehicle {
+  bookingId String
+  vehicleId String
+  booking   Booking @relation(fields: [bookingId], references: [id])
+  vehicle   Vehicle @relation(fields: [vehicleId], references: [id])
+
+  @@id([bookingId, vehicleId])
+}
+
+model BookingAddOn {
+  bookingId String
+  addOnId   String
+  booking   Booking @relation(fields: [bookingId], references: [id])
+  addOn     AddOn @relation(fields: [addOnId], references: [id])
+
+  @@id([bookingId, addOnId])
+}
+
+model BookingStatusEvent {
+  id          String @id @default(cuid())
+  bookingId   String
+  status      BookingStatus
+  at          DateTime @default(now())
+  actorUserId String?
+  booking     Booking @relation(fields: [bookingId], references: [id])
+}
+
+model BookingPhoto {
+  id        String @id @default(cuid())
+  bookingId String
+  stage     String
+  url       String
+  createdAt DateTime @default(now())
+  booking   Booking @relation(fields: [bookingId], references: [id])
+}
+
+model Subscription {
+  id                 String @id @default(cuid())
+  customerId         String
+  servicePackageId   String
+  cadence            String
+  discountPct        Float
+  active             Boolean @default(true)
+  nextRunAt          DateTime
+}
+
+model Review {
+  id          String @id @default(cuid())
+  customerId  String
+  bookingId   String @unique
+  rating      Int
+  comment     String
+  createdAt   DateTime @default(now())
+  customer    Customer @relation(fields: [customerId], references: [id])
+}
+
+model Payout {
+  id          String @id @default(cuid())
+  washerId    String
+  amountCents Int
+  status      String
+  paidAt      DateTime?
+  washer      Washer @relation(fields: [washerId], references: [id])
+}
+
+model Invoice {
+  id             String @id @default(cuid())
+  bookingId      String @unique
+  invoiceNumber  String @unique
+  gstCents       Int
+  totalCents     Int
+  issuedAt       DateTime @default(now())
+  booking        Booking @relation(fields: [bookingId], references: [id])
+}
+
+model Dispute {
+  id          String @id @default(cuid())
+  bookingId   String @unique
+  reason      String
+  status      String
+  createdAt   DateTime @default(now())
+  booking     Booking @relation(fields: [bookingId], references: [id])
+}
+
+model SupportTicket {
+  id          String @id @default(cuid())
+  userId      String
+  bookingId   String?
+  category    String
+  subject     String
+  description String
+  status      String
+  createdAt   DateTime @default(now())
+}
+
+model PricingRule {
+  id          String @id @default(cuid())
+  type        String
+  name        String
+  active      Boolean @default(true)
+  value       Float
+  metadata    Json
+}
+
+model Promo {
+  id             String @id @default(cuid())
+  code           String @unique
+  discountPct    Float
+  expiresAt      DateTime
+  maxRedemptions Int?
+  active         Boolean @default(true)
+}
+
+model FleetAccount {
+  id              String @id @default(cuid())
+  legalName       String
+  abn             String?
+  billingMode     String
+  accountManager  String?
+  notes           String?
+}
+
+model FleetVehicle {
+  id             String @id @default(cuid())
+  fleetAccountId String
+  make           String
+  model          String
+  rego           String
+}
+
+model AuditLog {
+  id          String @id @default(cuid())
+  actorUserId String?
+  action      String
+  entityType  String
+  entityId    String
+  metadata    Json
+  createdAt   DateTime @default(now())
+}
