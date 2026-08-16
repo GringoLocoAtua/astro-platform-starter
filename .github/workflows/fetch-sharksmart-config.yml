@@ -1,0 +1,42 @@
+name: Fetch SharkSmart App Config
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/fetch-sharksmart-config.yml']
+  workflow_dispatch:
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch app launch config and probe alert routes
+        shell: bash
+        run: |
+          set -euxo pipefail
+          mkdir -p report
+          BASECFG='https://sharksmart-s26.s3.ap-southeast-2.amazonaws.com/applaunch.json'
+          curl -fsSL -A 'SharkSmart/Android' "$BASECFG" -o report/applaunch.json
+          cat report/applaunch.json
+          python3 - <<'PY'
+          import json,re
+          d=json.load(open('report/applaunch.json'))
+          print('\n=== JSON ===')
+          print(json.dumps(d,indent=2))
+          text=json.dumps(d)
+          urls=sorted(set(re.findall(r'https?://[^"\\ ]+',text)))
+          open('report/config-urls.txt','w').write('\n'.join(urls))
+          print('\n=== URLS ===')
+          print('\n'.join(urls))
+          PY
+          : > report/probes.txt
+          while IFS= read -r u; do
+            echo "BASE $u" | tee -a report/probes.txt
+            for p in '/alerts' '/alerts/' '/alerts/map' '/alerts/types'; do
+              code=$(curl -L -sS -o report/body.tmp -w '%{http_code}' --max-time 20 -A 'SharkSmart/Android' "${u%/}$p" || true)
+              echo "$p HTTP $code $(head -c 250 report/body.tmp | tr '\n' ' ')" | tee -a report/probes.txt
+            done
+          done < report/config-urls.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sharksmart-live-config-report
+          path: report/*
