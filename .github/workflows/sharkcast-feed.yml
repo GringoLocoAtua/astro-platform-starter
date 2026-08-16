@@ -1,0 +1,25 @@
+name: SharkCast Public Feed Relay
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '*/5 * * * *'
+permissions:
+  contents: write
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Refresh SharkCast feed
+        run: python sharkcast-feed/scrape.py
+      - name: Commit refreshed feed
+        run: |
+          git config user.name 'BU1ST SharkCast Relay'
+          git config user.email 'actions@users.noreply.github.com'
+          git add sharkcast-feed/latest.json
+          if git diff --cached --quiet; then
+            echo 'No feed change'
+          else
+            git commit -m 'Refresh SharkCast public feed'
+            git push
+          fi
