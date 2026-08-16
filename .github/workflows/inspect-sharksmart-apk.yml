@@ -9,11 +9,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Download public SharkSmart APK
+      - name: Download public SharkSmart APK via Aptoide
         shell: bash
         run: |
           set -euxo pipefail
-          curl -fL --retry 3 --connect-timeout 20 -A 'Mozilla/5.0' 'https://d.apkpure.com/b/APK/mobiddiction.com.sharksmart.nsw?version=latest' -o sharksmart.apk
+          curl -fsSL 'https://ws75.aptoide.com/api/7/app/get?package_name=mobiddiction.com.sharksmart.nsw' -o aptoide.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open('aptoide.json'))
+          print(json.dumps(d,indent=2)[:8000])
+          path=d['nodes']['meta']['data']['file']['path']
+          print(path)
+          open('apk-url.txt','w').write(path)
+          PY
+          URL="$(cat apk-url.txt)"
+          curl -fL --retry 3 -A 'Mozilla/5.0' "$URL" -o sharksmart.apk
           file sharksmart.apk
           sha256sum sharksmart.apk | tee apk-sha256.txt
           test $(stat -c%s sharksmart.apk) -gt 1000000
@@ -22,13 +32,14 @@ jobs:
         run: |
           set -euxo pipefail
           mkdir -p apk-unzip report
-          unzip -q sharksmart.apk -d apk-unzip || true
-          find apk-unzip -type f -maxdepth 4 -print0 | xargs -0 strings -a 2>/dev/null | grep -Eo 'https?://[^ "<>]+' | sed 's/[),;].*$//' | sort -u > report/all-urls.txt || true
-          find apk-unzip -type f -maxdepth 4 -print0 | xargs -0 strings -a 2>/dev/null | grep -Eio '([a-z0-9-]+\.)+[a-z]{2,}(/[a-z0-9_?&=./%-]+)?' | grep -Ei 'shark|mobi|api|aws|amazon|cloudfront|mapbox|alert|notification' | sort -u > report/interesting-hosts.txt || true
-          grep -RInaE 'baseUrl|base_url|endpoint|apiUrl|api_url|alerts|notifications|mobiconnect|sharksmart' apk-unzip 2>/dev/null | head -n 500 > report/interesting-strings.txt || true
-          cp apk-sha256.txt report/
-          echo '=== URLS ==='; cat report/all-urls.txt | head -n 300
-          echo '=== HOSTS ==='; cat report/interesting-hosts.txt | head -n 300
+          unzip -q sharksmart.apk -d apk-unzip
+          find apk-unzip -type f -print0 | xargs -0 strings -a 2>/dev/null | grep -Eo 'https?://[^ "<>]+' | sed 's/[),;].*$//' | sort -u > report/all-urls.txt || true
+          find apk-unzip -type f -print0 | xargs -0 strings -a 2>/dev/null | grep -Eio '([a-z0-9-]+\.)+[a-z]{2,}(/[a-z0-9_?&=./%-]+)?' | grep -Ei 'shark|mobi|api|aws|amazon|cloudfront|mapbox|alert|notification|dpi|nsw' | sort -u > report/interesting-hosts.txt || true
+          find apk-unzip -type f -print0 | xargs -0 strings -a 2>/dev/null | grep -Ei 'baseUrl|base_url|endpoint|apiUrl|api_url|alerts|notifications|mobiconnect|sharksmart' | sort -u | head -n 1000 > report/interesting-strings.txt || true
+          cp apk-sha256.txt apk-url.txt aptoide.json report/
+          echo '=== URLS ==='; head -n 400 report/all-urls.txt
+          echo '=== HOSTS ==='; head -n 400 report/interesting-hosts.txt
+          echo '=== STRINGS ==='; head -n 400 report/interesting-strings.txt
       - uses: actions/upload-artifact@v4
         with:
           name: sharksmart-apk-network-report
