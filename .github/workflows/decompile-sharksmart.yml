@@ -1,0 +1,66 @@
+name: Decompile SharkSmart Networking
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/decompile-sharksmart.yml']
+  workflow_dispatch:
+jobs:
+  decompile:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download current public APK
+        shell: bash
+        run: |
+          set -euxo pipefail
+          curl -fsSL 'https://ws75.aptoide.com/api/7/app/get?package_name=mobiddiction.com.sharksmart.nsw' -o aptoide.json
+          URL=$(python3 -c "import json; print(json.load(open('aptoide.json'))['nodes']['meta']['data']['file']['path'])")
+          curl -fL --retry 3 -A 'Mozilla/5.0' "$URL" -o sharksmart.apk
+          sha256sum sharksmart.apk
+      - name: Install JADX
+        shell: bash
+        run: |
+          set -euxo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y jadx || {
+            VER='1.5.3'
+            curl -fL "https://github.com/skylot/jadx/releases/download/v${VER}/jadx-${VER}.zip" -o jadx.zip
+            unzip -q jadx.zip -d "$HOME/jadx"
+            echo "$HOME/jadx/bin" >> "$GITHUB_PATH"
+          }
+      - name: Decompile and extract networking code
+        shell: bash
+        run: |
+          set -euxo pipefail
+          mkdir -p decoded report
+          jadx --show-bad-code --deobf -d decoded sharksmart.apk >/tmp/jadx.log 2>&1 || true
+          cp /tmp/jadx.log report/jadx.log
+          grep -RInaE 'applaunch\.json|/alerts/map|/alerts/types|/alerts/|baseUrl|baseURL|ApiData|SharkSmartCore|Retrofit|OkHttp|Interceptor|Authorization|X-[A-Za-z-]+|User-Agent|amazonaws|firebaseio|AlertRepository|SharkAlerts' decoded/sources 2>/dev/null | head -n 5000 > report/network-grep.txt || true
+          python3 - <<'PY'
+          import os,re,shutil
+          roots=['decoded/sources']
+          pats=re.compile(r'applaunch\.json|/alerts/map|/alerts/types|class ApiData|SharkSmartCore|baseUrl|AlertRepository|SharkAlerts|Retrofit',re.I)
+          n=0
+          for root in roots:
+            for dp,_,fs in os.walk(root):
+              for f in fs:
+                if not f.endswith(('.java','.kt')): continue
+                p=os.path.join(dp,f)
+                try:s=open(p,encoding='utf-8',errors='ignore').read()
+                except:continue
+                if pats.search(s):
+                  rel=os.path.relpath(p,root).replace('/','__')
+                  shutil.copyfile(p,os.path.join('report',rel))
+                  n+=1
+                  if n>=150: break
+              if n>=150: break
+            if n>=150: break
+          print('copied',n,'relevant source files')
+          PY
+          ls -lah report | head -n 200
+          echo '=== GREP HEAD ==='
+          sed -n '1,1200p' report/network-grep.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sharksmart-decompiled-networking
+          path: report/*
