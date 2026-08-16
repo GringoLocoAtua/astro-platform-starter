@@ -1,0 +1,23 @@
+name: Capture OCEARCH Browser Data
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'sharkcast-feed/ocearch-browser-capture.mjs'
+      - '.github/workflows/capture-ocearch-browser.yml'
+  workflow_dispatch:
+jobs:
+  capture:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm init -y && npm install playwright@1.55.0
+      - run: npx playwright install --with-deps chromium
+      - run: node sharkcast-feed/ocearch-browser-capture.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ocearch-browser-capture
+          path: report/*
