@@ -1,0 +1,10 @@
+{
+  "checked_at": null,
+  "ok": false,
+  "source_http": null,
+  "events": [],
+  "event_count": 0,
+  "latest_event_time": null,
+  "errors": ["Relay not run yet"],
+  "relay_version": "1.0"
+}
