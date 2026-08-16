@@ -4,6 +4,7 @@ from urllib.request import Request, urlopen
 
 OUT = os.path.join(os.path.dirname(__file__), 'latest.json')
 UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/131 Safari/537.36'
+# Public-data relay only. No SharkSmart credentials or private APIs are used.
 
 STATIONS = {
 'kingscliff':(-28.257,153.578),'clarkes':(-28.640,153.613),'lennox':(-28.800,153.599),'sharpes':(-28.841,153.604),'ballina':(-28.874,153.593),'evans head':(-29.118,153.438),'yamba':(-29.435,153.365),'coffs harbour':(-30.288,153.139),'mylestom':(-30.365,153.104),'nambucca':(-30.646,153.010),'south west rocks':(-30.885,153.042),'crescent head':(-31.191,152.978),'port macquarie':(-31.466,152.930),'old bar':(-31.970,152.590),'forster':(-32.180,152.513),'bennetts':(-32.665,152.178),'hawks nest':(-32.665,152.178),'birubi':(-32.778,152.085),'newcastle':(-32.929,151.790),'redhead':(-33.015,151.714),'soldiers':(-33.296,151.570),'avoca':(-33.468,151.438),'killcare':(-33.529,151.371),'palm beach':(-33.601,151.326),'north narrabeen':(-33.711,151.302),'north steyne':(-33.792,151.289),'manly':(-33.797,151.288),'queenscliff':(-33.782,151.286),'bondi':(-33.891,151.277),'maroubra':(-33.949,151.255),'cronulla':(-34.058,151.154),'stanwell park':(-34.226,150.986),'wollongong':(-34.420,150.902),'shellharbour':(-34.583,150.870),'kiama':(-34.672,150.859),'cudmirrah':(-35.157,150.599),'mollymook':(-35.340,150.475),'malua bay':(-35.793,150.229),'merimbula':(-36.889,149.915)
@@ -24,7 +25,6 @@ def strip_html(s):
     return re.sub(r'\s+',' ',s).strip()
 
 def parse_time(text):
-    # acoustic: 09:48:29 AM (AEST) on 31-July-2026
     m=re.search(r'(\d{1,2}):(\d{2}):(\d{2})\s*(AM|PM)\s*\((AEST|AEDT)\)\s*on\s*(\d{1,2})-([A-Za-z]+)-(20\d{2})',text,re.I)
     if m:
         h,mi,se=int(m.group(1)),int(m.group(2)),int(m.group(3)); ap=m.group(4).upper()
@@ -35,7 +35,6 @@ def parse_time(text):
             from datetime import timedelta
             local=datetime(int(m.group(8)),month,int(m.group(6)),h,mi,se,tzinfo=timezone(timedelta(hours=offset)))
             return local.astimezone(timezone.utc).isoformat().replace('+00:00','Z')
-    # drone: at 03:29 pm, 23 Feb 2026
     m=re.search(r'at\s*(\d{1,2}):(\d{2})\s*(am|pm),\s*(\d{1,2})\s+([A-Za-z]+)\s+(20\d{2})',text,re.I)
     if m:
         h,mi=int(m.group(1)),int(m.group(2)); ap=m.group(3).lower()
@@ -50,7 +49,6 @@ def parse_time(text):
 
 def match_coord(text):
     low=text.lower()
-    # Prefer explicit receiver station
     m=re.search(r'detected by\s+(.+?)\s+receiver',low,re.I)
     if m:
         name=m.group(1).strip()
@@ -78,8 +76,10 @@ def parse(html):
         when=parse_time(text)
         if not when: continue
         station,(lat,lon)=match_coord(text)
-        species=(re.search(r'(White|Bull|Tiger)\s+Shark',text,re.I) or [None,'Unknown'])[1].title()+' Shark'
-        tag=(re.search(r'Shark\s+#?(\d+)',text,re.I) or [None,None])[1]
+        sm=re.search(r'(White|Bull|Tiger)\s+Shark',text,re.I)
+        species=(sm.group(1).title()+' Shark') if sm else 'Unknown Shark'
+        tm=re.search(r'Shark\s+#?(\d+)',text,re.I)
+        tag=tm.group(1) if tm else None
         category='acoustic'
         if re.search(r'By Drone',text,re.I):category='drone'
         elif re.search(r'By Lifeguard',text,re.I):category='sighting'
