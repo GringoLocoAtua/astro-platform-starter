@@ -1,0 +1,42 @@
+name: Inspect Disaster Dashboard Root Bundle
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/inspect-disaster-dashboard-root-bundle.yml']
+  workflow_dispatch:
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch real Angular bundles from root
+        shell: bash
+        run: |
+          set -euxo pipefail
+          mkdir -p report/js
+          ORIGIN='https://disaster.disasterdashboards.com/'
+          PAGE="${ORIGIN}dashboard/sharks"
+          curl -L -sS -A 'Mozilla/5.0' "$PAGE" -o report/page.html
+          python3 - <<'PY'
+          import re,urllib.parse,html
+          s=open('report/page.html',encoding='utf-8',errors='ignore').read()
+          base=urllib.parse.urljoin('https://disaster.disasterdashboards.com/dashboard/sharks', (re.search(r'<base[^>]+href=["\']([^"\']+)',s,re.I) or [None,'/'])[1])
+          srcs=re.findall(r'<script[^>]+src=["\']([^"\']+)',s,re.I)
+          urls=[urllib.parse.urljoin(base,html.unescape(x)) for x in srcs if 'googletagmanager' not in x and 'unpkg' not in x]
+          open('report/script-urls.txt','w').write('\n'.join(urls))
+          print('BASE',base); print(*urls,sep='\n')
+          PY
+          i=0
+          while IFS= read -r u; do
+            i=$((i+1)); curl -fL -sS --max-time 60 -A 'Mozilla/5.0' "$u" -o "report/js/$i.js"; echo "$i $(wc -c < report/js/$i.js) $u"
+          done < report/script-urls.txt
+          cat report/js/*.js > report/all.js
+          grep -Eo 'https?://[^"'"'"' <>)]+' report/all.js | sort -u > report/urls.txt || true
+          grep -Ein 'shark|SharkSmart|TaggedShark|SMARTDrumline|SlsNsw|AerialDetection|api|baseUrl|environment|endpoint|graphql|incidents|sightings|dataSource|datasource' report/all.js | head -n 12000 > report/interesting.txt || true
+          strings report/all.js | grep -Ei 'shark|api|disaster|endpoint|baseurl|mobiddiction|sighting|incident' | head -n 5000 > report/strings-interesting.txt || true
+          echo '=== RELEVANT URLS ==='; grep -Ei 'api|disaster|shark|demonz|mobiddiction|cloud|amazon|azure' report/urls.txt | head -n 1000 || true
+          echo '=== SHARK/API CONTEXT ==='; head -n 1800 report/interesting.txt || true
+      - uses: actions/upload-artifact@v4
+        with:
+          name: disaster-dashboard-root-bundle-inspection
+          path: report/*
