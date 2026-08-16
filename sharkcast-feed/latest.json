@@ -1,10 +1,13 @@
 {
-  "checked_at": null,
+  "checked_at": "2026-08-16T01:54:43.186602Z",
   "ok": false,
   "source_http": null,
   "events": [],
   "event_count": 0,
   "latest_event_time": null,
-  "errors": ["Relay not run yet"],
+  "errors": [
+    "https://twstalker.com/NSWSharkSmart: HTTPError: HTTP Error 403: Forbidden",
+    "https://www.twstalker.com/NSWSharkSmart: HTTPError: HTTP Error 403: Forbidden"
+  ],
   "relay_version": "1.0"
 }
