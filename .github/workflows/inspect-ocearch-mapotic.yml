@@ -1,0 +1,52 @@
+name: Inspect OCEARCH Mapotic Public Data
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/inspect-ocearch-mapotic.yml']
+  workflow_dispatch:
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Inspect public OCEARCH Mapotic pages and bundles
+        shell: bash
+        run: |
+          set -euxo pipefail
+          mkdir -p report/js
+          pages=(
+            'https://www.mapotic.com/ocearch/2344847-contender'
+            'https://www.mapotic.com/ocearch'
+            'https://www.ocearch.org/tracker/'
+          )
+          i=0
+          for u in "${pages[@]}"; do
+            i=$((i+1)); curl -fL -sS --max-time 60 -A 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/131 Safari/537.36' "$u" -o "report/page-$i.html" || true
+            echo "PAGE $i $(wc -c < report/page-$i.html) $u"
+          done
+          python3 - <<'PY'
+          import re,html,urllib.parse,glob,os,json
+          allurls=[]
+          bases=['https://www.mapotic.com/ocearch/2344847-contender','https://www.mapotic.com/ocearch','https://www.ocearch.org/tracker/']
+          for idx,p in enumerate(glob.glob('report/page-*.html')):
+            s=open(p,encoding='utf-8',errors='ignore').read(); base=bases[idx]
+            print('\n===',p,'===')
+            for pat in [r'https?://[^"\' <>]+',r'/api/[^"\' <>]+',r'api[^"\']{0,120}',r'2344847[^"\']{0,500}',r'46\.43376[^<]{0,500}',r'GPS[^<]{0,1000}']:
+              xs=re.findall(pat,s,re.I)
+              print('PAT',pat,'COUNT',len(xs)); print(*xs[:80],sep='\n')
+            for src in re.findall(r'<script[^>]+src=["\']([^"\']+)',s,re.I): allurls.append(urllib.parse.urljoin(base,html.unescape(src)))
+          open('report/script-urls.txt','w').write('\n'.join(dict.fromkeys(allurls)))
+          PY
+          i=0
+          while IFS= read -r u; do
+            i=$((i+1)); curl -L -sS --max-time 60 -A 'Mozilla/5.0' "$u" -o "report/js/$i.js" || true
+          done < report/script-urls.txt
+          cat report/js/*.js 2>/dev/null > report/all.js || true
+          grep -Eo 'https?://[^"'"'"' <>)]+' report/all.js | sort -u > report/urls.txt || true
+          grep -Ein 'ocearch|mapotic|2344847|marker|location|position|gps|api/|graphql|track|telemetry|ping|coordinates|lat|lon' report/all.js | head -n 20000 > report/interesting.txt || true
+          echo '=== URLS ==='; grep -Ei 'api|mapotic|ocearch' report/urls.txt | head -n 1000 || true
+          echo '=== INTERESTING HEAD ==='; head -n 1800 report/interesting.txt || true
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ocearch-mapotic-public-data-inspection
+          path: report/*
