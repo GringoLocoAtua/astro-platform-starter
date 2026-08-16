@@ -1,0 +1,43 @@
+name: Fetch Demonz Live Shark Map
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/fetch-demonz-shark-map.yml']
+  workflow_dispatch:
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch live public shark map JSON
+        shell: bash
+        run: |
+          set -euxo pipefail
+          mkdir -p report
+          API='https://demonz.azure-api.net/emergency/api/shark/nsw/map'
+          for origin in 'https://emergency.centralcoast.nsw.gov.au' 'https://emergency.kiama.nsw.gov.au' 'https://disaster.coffsharbour.nsw.gov.au'; do
+            safe=$(echo "$origin" | sed 's#https://##;s#[^A-Za-z0-9]#_#g')
+            code=$(curl -L -sS --max-time 30 -A 'Mozilla/5.0' -H "Alt-Origin: $origin" -H 'Accept: application/json' -o "report/$safe.json" -w '%{http_code}' "$API" || true)
+            echo "$origin HTTP $code bytes $(wc -c < report/$safe.json)"
+            python3 - "$origin" "report/$safe.json" <<'PY'
+          import json,sys
+          origin,path=sys.argv[1:]
+          try:d=json.load(open(path))
+          except Exception as e:
+            print('BAD JSON',e); print(open(path,errors='ignore').read()[:2000]); raise SystemExit
+          print('TOP KEYS', list(d) if isinstance(d,dict) else type(d))
+          data=d.get('data',d) if isinstance(d,dict) else d
+          print('DATA TYPE',type(data).__name__)
+          if isinstance(data,dict):
+            print('DATA KEYS',list(data.keys()))
+            feats=data.get('features') or data.get('data') or data.get('items') or []
+          elif isinstance(data,list): feats=data
+          else: feats=[]
+          print('FEATURE COUNT',len(feats))
+          for x in feats[:30]: print(json.dumps(x,ensure_ascii=False)[:4000])
+          PY
+          done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: demonz-live-shark-map
+          path: report/*
