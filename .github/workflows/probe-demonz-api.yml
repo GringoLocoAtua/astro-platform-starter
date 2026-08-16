@@ -1,0 +1,46 @@
+name: Probe Demonz Public Shark API
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/probe-demonz-api.yml']
+  workflow_dispatch:
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Probe public API with dashboard origins
+        shell: bash
+        run: |
+          set -euxo pipefail
+          mkdir -p report
+          API='https://demonz.azure-api.net/emergency/api'
+          : > report/results.txt
+          origins=(
+            'https://disaster.disasterdashboards.com'
+            'https://emergency.centralcoast.nsw.gov.au'
+            'https://emergency.kiama.nsw.gov.au'
+            'https://disaster.coffsharbour.nsw.gov.au'
+          )
+          for origin in "${origins[@]}"; do
+            safe=$(echo "$origin" | sed 's#https://##;s#[^A-Za-z0-9]#_#g')
+            echo "=== ORIGIN $origin ===" | tee -a report/results.txt
+            code=$(curl -L -sS --max-time 30 -A 'Mozilla/5.0' -H "Alt-Origin: $origin" -H 'Accept: application/json' -o "report/config-$safe.json" -w '%{http_code}' "$API/config" || true)
+            echo "CONFIG HTTP $code" | tee -a report/results.txt
+            head -c 12000 "report/config-$safe.json" | tee -a report/results.txt || true
+            echo | tee -a report/results.txt
+          done
+          python3 - <<'PY'
+          import json,glob,re,os
+          for p in glob.glob('report/config-*.json'):
+            print('\nFILE',p)
+            try:d=json.load(open(p))
+            except Exception as e:print('bad json',e);continue
+            text=json.dumps(d,indent=2)
+            for line in text.splitlines():
+              if re.search(r'shark|sighting|map|widget|url|feed',line,re.I): print(line[:1500])
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: demonz-public-shark-api-probe
+          path: report/*
