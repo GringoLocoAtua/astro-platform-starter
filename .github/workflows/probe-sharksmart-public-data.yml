@@ -1,0 +1,38 @@
+name: Probe SharkSmart Public Data Surfaces
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/probe-sharksmart-public-data.yml']
+  workflow_dispatch:
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Probe public data surfaces without credentials
+        shell: bash
+        run: |
+          set -u
+          mkdir -p report
+          : > report/results.txt
+          probe(){
+            u="$1"
+            echo "=== $u ===" | tee -a report/results.txt
+            code=$(curl -L -sS --max-time 20 -A 'Mozilla/5.0' -o report/body.tmp -w '%{http_code}' "$u" || true)
+            echo "HTTP $code" | tee -a report/results.txt
+            head -c 3000 report/body.tmp | tee -a report/results.txt || true
+            echo | tee -a report/results.txt
+          }
+          probe 'https://sharksmartandroid.firebaseio.com/.json'
+          probe 'https://sharksmartandroid.firebaseio.com/alerts.json'
+          probe 'https://sharksmartandroid.firebaseio.com/alert.json'
+          probe 'https://sharksmartandroid.firebaseio.com/detections.json'
+          probe 'https://sharksmartandroid.firebaseio.com/sharks.json'
+          probe 'https://sharksmartandroid.firebaseio.com/stations.json'
+          probe 'https://sharksmartandroid.firebaseio.com/config.json'
+          probe 'https://sharksmartandroid.firebaseio.com/app.json'
+          probe 'https://sharksmart-s26.s3.ap-southeast-2.amazonaws.com/applaunch.json'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sharksmart-public-surface-probe
+          path: report/results.txt
