@@ -3,10 +3,16 @@ on:
   workflow_dispatch:
   schedule:
     - cron: '*/5 * * * *'
+  push:
+    branches: [main]
+    paths:
+      - 'sharkcast-feed/**'
+      - '.github/workflows/sharkcast-feed.yml'
 permissions:
   contents: write
 jobs:
   refresh:
+    if: github.actor != 'BU1ST-SharkCast-Relay'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
