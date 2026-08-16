@@ -1,0 +1,35 @@
+name: Inspect SharkSmart APK
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/inspect-sharksmart-apk.yml']
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download public SharkSmart APK
+        shell: bash
+        run: |
+          set -euxo pipefail
+          curl -fL --retry 3 --connect-timeout 20 -A 'Mozilla/5.0' 'https://d.apkpure.com/b/APK/mobiddiction.com.sharksmart.nsw?version=latest' -o sharksmart.apk
+          file sharksmart.apk
+          sha256sum sharksmart.apk | tee apk-sha256.txt
+          test $(stat -c%s sharksmart.apk) -gt 1000000
+      - name: Extract URLs and hostnames
+        shell: bash
+        run: |
+          set -euxo pipefail
+          mkdir -p apk-unzip report
+          unzip -q sharksmart.apk -d apk-unzip || true
+          find apk-unzip -type f -maxdepth 4 -print0 | xargs -0 strings -a 2>/dev/null | grep -Eo 'https?://[^ "<>]+' | sed 's/[),;].*$//' | sort -u > report/all-urls.txt || true
+          find apk-unzip -type f -maxdepth 4 -print0 | xargs -0 strings -a 2>/dev/null | grep -Eio '([a-z0-9-]+\.)+[a-z]{2,}(/[a-z0-9_?&=./%-]+)?' | grep -Ei 'shark|mobi|api|aws|amazon|cloudfront|mapbox|alert|notification' | sort -u > report/interesting-hosts.txt || true
+          grep -RInaE 'baseUrl|base_url|endpoint|apiUrl|api_url|alerts|notifications|mobiconnect|sharksmart' apk-unzip 2>/dev/null | head -n 500 > report/interesting-strings.txt || true
+          cp apk-sha256.txt report/
+          echo '=== URLS ==='; cat report/all-urls.txt | head -n 300
+          echo '=== HOSTS ==='; cat report/interesting-hosts.txt | head -n 300
+      - uses: actions/upload-artifact@v4
+        with:
+          name: sharksmart-apk-network-report
+          path: report/*
