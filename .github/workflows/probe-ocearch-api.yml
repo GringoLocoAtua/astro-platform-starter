@@ -1,0 +1,29 @@
+name: Probe OCEARCH Mapotic Public API
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/probe-ocearch-api.yml']
+  workflow_dispatch:
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Probe public endpoints
+        shell: bash
+        run: |
+          set -euxo pipefail
+          mkdir -p report
+          urls=(
+            'https://map.ocearch.org/api/v1.1/maps/3413/pois/2344847/'
+            'https://map.ocearch.org/api/v1.1/maps/3413/pois.geojson/'
+            'https://map.ocearch.org/api/v1.1/maps/3413/pois/?page_size=10'
+          )
+          i=0
+          for u in "${urls[@]}"; do
+            i=$((i+1)); code=$(curl -L -sS --max-time 30 -A 'Mozilla/5.0' -H 'Accept: application/json' -o "report/$i.json" -w '%{http_code}' "$u" || true); echo "$u HTTP $code bytes $(wc -c < report/$i.json)"; head -c 12000 "report/$i.json"; echo
+          done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ocearch-mapotic-api-probe
+          path: report/*
