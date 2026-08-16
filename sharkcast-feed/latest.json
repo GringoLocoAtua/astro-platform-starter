@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-08-16T19:19:00.086769Z",
+  "checked_at": "2026-08-16T19:41:01.247363Z",
   "ok": true,
   "events": [
     {
@@ -266,7 +266,7 @@
   "event_count": 20,
   "latest_event_time": "2026-07-30T23:48:29Z",
   "errors": [
-    "https://xcancel.com/NSWSharkSmart/rss: HTTPError: HTTP Error 400: Bad Request"
+    "https://xcancel.com/NSWSharkSmart/rss: URLError: <urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1000)>"
   ],
   "relay_version": "1.2"
 }
