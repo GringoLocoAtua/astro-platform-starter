@@ -1,0 +1,45 @@
+name: Inspect Disaster Dashboard Shark API
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/inspect-disaster-dashboard.yml']
+  workflow_dispatch:
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch app shell and JS bundles
+        shell: bash
+        run: |
+          set -euxo pipefail
+          mkdir -p report/js
+          URL='https://disaster.disasterdashboards.com/dashboard/sharks'
+          curl -L -sS -A 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/131 Safari/537.36' -D report/headers.txt "$URL" -o report/page.html
+          echo '=== PAGE HEAD ==='; head -n 100 report/page.html
+          python3 - <<'PY'
+          import re,html,urllib.parse
+          s=open('report/page.html',encoding='utf-8',errors='ignore').read()
+          srcs=re.findall(r'<script[^>]+src=["\']([^"\']+)',s,re.I)
+          hrefs=re.findall(r'<link[^>]+href=["\']([^"\']+)',s,re.I)
+          base='https://disaster.disasterdashboards.com/dashboard/sharks'
+          urls=[]
+          for x in srcs:
+            urls.append(urllib.parse.urljoin(base,html.unescape(x)))
+          open('report/script-urls.txt','w').write('\n'.join(urls))
+          print('scripts',*urls,sep='\n')
+          print('links',*hrefs[:100],sep='\n')
+          PY
+          i=0
+          while IFS= read -r u; do
+            i=$((i+1)); echo "FETCH $u"; curl -L -sS --max-time 30 -A 'Mozilla/5.0' "$u" -o "report/js/$i.js" || true
+          done < report/script-urls.txt
+          cat report/js/*.js 2>/dev/null > report/all.js || true
+          grep -Eo 'https?://[^"'"'"' <>]+' report/all.js | sort -u > report/urls.txt || true
+          grep -Ein 'shark|SharkSmart|TaggedShark|disaster|api/|axios|baseURL|graphql|incident|feed|sighting|mobiddiction' report/all.js | head -n 6000 > report/interesting.txt || true
+          echo '=== URLS ==='; head -n 600 report/urls.txt || true
+          echo '=== INTERESTING ==='; head -n 1200 report/interesting.txt || true
+      - uses: actions/upload-artifact@v4
+        with:
+          name: disaster-dashboard-api-inspection
+          path: report/*
