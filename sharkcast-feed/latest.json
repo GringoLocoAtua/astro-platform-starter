@@ -1,7 +1,6 @@
 {
-  "checked_at": "2026-08-16T01:55:09.171591Z",
+  "checked_at": "2026-08-16T01:57:25.414993Z",
   "ok": false,
-  "source_http": null,
   "events": [],
   "event_count": 0,
   "latest_event_time": null,
@@ -9,5 +8,5 @@
     "https://twstalker.com/NSWSharkSmart: HTTPError: HTTP Error 403: Forbidden",
     "https://www.twstalker.com/NSWSharkSmart: HTTPError: HTTP Error 403: Forbidden"
   ],
-  "relay_version": "1.0"
+  "relay_version": "1.1"
 }
