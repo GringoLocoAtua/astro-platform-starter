@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-08-19T21:15:17.351626Z",
+  "checked_at": "2026-08-19T21:45:35.974799Z",
   "ok": true,
   "events": [
     {
@@ -266,7 +266,7 @@
   "event_count": 20,
   "latest_event_time": "2026-07-30T23:48:29Z",
   "errors": [
-    "https://xcancel.com/NSWSharkSmart/rss: HTTPError: HTTP Error 400: Bad Request"
+    "https://xcancel.com/NSWSharkSmart/rss: URLError: <urlopen error [Errno 101] Network is unreachable>"
   ],
   "relay_version": "1.2"
 }
