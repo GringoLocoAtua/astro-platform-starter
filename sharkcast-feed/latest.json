@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-08-19T14:43:02.645528Z",
+  "checked_at": "2026-08-19T15:15:12.789081Z",
   "ok": true,
   "events": [
     {
@@ -266,12 +266,7 @@
   "event_count": 20,
   "latest_event_time": "2026-07-30T23:48:29Z",
   "errors": [
-    "https://xcancel.com/NSWSharkSmart/rss: HTTPError: HTTP Error 400: Bad Request",
-    "https://nitter.net/NSWSharkSmart/rss: HTTPError: HTTP Error 404: Not Found",
-    "https://nitter.poast.org/NSWSharkSmart/rss: HTTPError: HTTP Error 403: Forbidden",
-    "https://nitter.privacyredirect.com/NSWSharkSmart/rss: ParseError: syntax error: line 1, column 0",
-    "https://nitter.tiekoetter.com/NSWSharkSmart/rss: ParseError: syntax error: line 1, column 0",
-    "using last-good relay cache"
+    "https://xcancel.com/NSWSharkSmart/rss: HTTPError: HTTP Error 400: Bad Request"
   ],
   "relay_version": "1.2"
 }
