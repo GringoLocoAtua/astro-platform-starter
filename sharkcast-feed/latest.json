@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-08-22T16:44:40.141167Z",
+  "checked_at": "2026-08-22T17:04:15.935263Z",
   "ok": true,
   "events": [
     {
@@ -267,7 +267,7 @@
   "latest_event_time": "2026-07-30T23:48:29Z",
   "errors": [
     "https://xcancel.com/NSWSharkSmart/rss: HTTPError: HTTP Error 400: Bad Request",
-    "https://nitter.net/NSWSharkSmart/rss: URLError: <urlopen error timed out>",
+    "https://nitter.net/NSWSharkSmart/rss: ParseError: no element found: line 1, column 0",
     "https://nitter.poast.org/NSWSharkSmart/rss: HTTPError: HTTP Error 403: Forbidden",
     "https://nitter.privacyredirect.com/NSWSharkSmart/rss: URLError: <urlopen error timed out>",
     "https://nitter.tiekoetter.com/NSWSharkSmart/rss: ParseError: syntax error: line 1, column 0",
