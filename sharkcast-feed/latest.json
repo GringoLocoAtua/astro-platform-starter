@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-08-24T16:17:09.396052Z",
+  "checked_at": "2026-08-24T17:00:56.807689Z",
   "ok": true,
   "events": [
     {
@@ -269,7 +269,7 @@
     "https://xcancel.com/NSWSharkSmart/rss: HTTPError: HTTP Error 400: Bad Request",
     "https://nitter.net/NSWSharkSmart/rss: ParseError: no element found: line 1, column 0",
     "https://nitter.poast.org/NSWSharkSmart/rss: HTTPError: HTTP Error 403: Forbidden",
-    "https://nitter.privacyredirect.com/NSWSharkSmart/rss: URLError: <urlopen error timed out>",
+    "https://nitter.privacyredirect.com/NSWSharkSmart/rss: URLError: <urlopen error [Errno 111] Connection refused>",
     "https://nitter.tiekoetter.com/NSWSharkSmart/rss: ParseError: syntax error: line 1, column 0",
     "using last-good relay cache"
   ],
