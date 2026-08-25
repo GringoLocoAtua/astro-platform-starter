@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-08-25T21:43:00.152987Z",
+  "checked_at": "2026-08-25T22:05:12.737228Z",
   "ok": true,
   "events": [
     {
@@ -270,7 +270,7 @@
     "https://nitter.net/NSWSharkSmart/rss: HTTPError: HTTP Error 410: Gone",
     "https://nitter.poast.org/NSWSharkSmart/rss: HTTPError: HTTP Error 403: Forbidden",
     "https://nitter.privacyredirect.com/NSWSharkSmart/rss: URLError: <urlopen error [Errno 111] Connection refused>",
-    "https://nitter.tiekoetter.com/NSWSharkSmart/rss: ParseError: syntax error: line 1, column 0",
+    "https://nitter.tiekoetter.com/NSWSharkSmart/rss: HTTPError: HTTP Error 429: Too Many Requests",
     "using last-good relay cache"
   ],
   "relay_version": "1.2"
