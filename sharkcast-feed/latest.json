@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-08-25T22:43:44.076832Z",
+  "checked_at": "2026-08-25T23:11:58.459190Z",
   "ok": true,
   "events": [
     {
@@ -268,7 +268,7 @@
   "errors": [
     "https://xcancel.com/NSWSharkSmart/rss: HTTPError: HTTP Error 400: Bad Request",
     "https://nitter.net/NSWSharkSmart/rss: HTTPError: HTTP Error 410: Gone",
-    "https://nitter.poast.org/NSWSharkSmart/rss: HTTPError: HTTP Error 403: Forbidden",
+    "https://nitter.poast.org/NSWSharkSmart/rss: URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'nitter.poast.org'. (_ssl.c:1000)>",
     "https://nitter.privacyredirect.com/NSWSharkSmart/rss: URLError: <urlopen error [Errno 111] Connection refused>",
     "https://nitter.tiekoetter.com/NSWSharkSmart/rss: HTTPError: HTTP Error 429: Too Many Requests",
     "using last-good relay cache"
