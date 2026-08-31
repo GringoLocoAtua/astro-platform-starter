@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-08-31T06:49:10.705337Z",
+  "checked_at": "2026-08-31T14:38:28.764734Z",
   "ok": true,
   "events": [
     {
@@ -269,7 +269,7 @@
     "https://xcancel.com/NSWSharkSmart/rss: HTTPError: HTTP Error 400: Bad Request",
     "https://nitter.net/NSWSharkSmart/rss: HTTPError: HTTP Error 410: Gone",
     "https://nitter.poast.org/NSWSharkSmart/rss: URLError: <urlopen error [Errno -5] No address associated with hostname>",
-    "https://nitter.privacyredirect.com/NSWSharkSmart/rss: HTTPError: HTTP Error 502: Bad Gateway",
+    "https://nitter.privacyredirect.com/NSWSharkSmart/rss: HTTPError: HTTP Error 404: Not Found",
     "https://nitter.tiekoetter.com/NSWSharkSmart/rss: HTTPError: HTTP Error 429: Too Many Requests",
     "using last-good relay cache"
   ],
