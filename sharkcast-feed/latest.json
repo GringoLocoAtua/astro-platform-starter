@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-09-08T09:49:37.515843Z",
+  "checked_at": "2026-09-08T14:01:35.923129Z",
   "ok": true,
   "events": [
     {
@@ -270,7 +270,7 @@
     "https://nitter.net/NSWSharkSmart/rss: HTTPError: HTTP Error 410: Gone",
     "https://nitter.poast.org/NSWSharkSmart/rss: URLError: <urlopen error [Errno -5] No address associated with hostname>",
     "https://nitter.privacyredirect.com/NSWSharkSmart/rss: ParseError: syntax error: line 1, column 0",
-    "https://nitter.tiekoetter.com/NSWSharkSmart/rss: HTTPError: HTTP Error 429: Too Many Requests",
+    "https://nitter.tiekoetter.com/NSWSharkSmart/rss: ParseError: syntax error: line 1, column 0",
     "using last-good relay cache"
   ],
   "relay_version": "1.2"
