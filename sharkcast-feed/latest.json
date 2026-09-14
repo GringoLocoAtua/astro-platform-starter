@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-09-14T06:26:24.213217Z",
+  "checked_at": "2026-09-14T13:15:59.863642Z",
   "ok": true,
   "events": [
     {
@@ -266,7 +266,7 @@
   "event_count": 20,
   "latest_event_time": "2026-07-30T23:48:29Z",
   "errors": [
-    "https://xcancel.com/NSWSharkSmart/rss: HTTPError: HTTP Error 400: Bad Request",
+    "https://xcancel.com/NSWSharkSmart/rss: HTTPError: HTTP Error 451: ",
     "https://nitter.net/NSWSharkSmart/rss: URLError: <urlopen error [Errno 111] Connection refused>",
     "https://nitter.poast.org/NSWSharkSmart/rss: URLError: <urlopen error [Errno -5] No address associated with hostname>",
     "https://nitter.privacyredirect.com/NSWSharkSmart/rss: ParseError: syntax error: line 1, column 0",
