@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-09-25T19:58:51.351035Z",
+  "checked_at": "2026-09-25T23:15:48.283816Z",
   "ok": true,
   "events": [
     {
@@ -269,7 +269,7 @@
     "https://xcancel.com/NSWSharkSmart/rss: HTTPError: HTTP Error 451: ",
     "https://nitter.net/NSWSharkSmart/rss: URLError: <urlopen error [Errno 111] Connection refused>",
     "https://nitter.poast.org/NSWSharkSmart/rss: URLError: <urlopen error [Errno -5] No address associated with hostname>",
-    "https://nitter.privacyredirect.com/NSWSharkSmart/rss: HTTPError: HTTP Error 500: Internal Server Error",
+    "https://nitter.privacyredirect.com/NSWSharkSmart/rss: ParseError: syntax error: line 1, column 0",
     "https://nitter.tiekoetter.com/NSWSharkSmart/rss: ParseError: syntax error: line 1, column 0",
     "using last-good relay cache"
   ],
