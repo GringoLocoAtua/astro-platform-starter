@@ -1,5 +1,5 @@
 {
-  "checked_at": "2026-11-25T23:45:06.330502Z",
+  "checked_at": "2026-11-26T05:31:10.783007Z",
   "ok": true,
   "events": [
     {
@@ -23,7 +23,8 @@
     "https://nitter.net/NSWSharkSmart/rss: HTTPError: HTTP Error 410: Gone",
     "https://nitter.poast.org/NSWSharkSmart/rss: URLError: <urlopen error [Errno -5] No address associated with hostname>",
     "https://nitter.privacyredirect.com/NSWSharkSmart/rss: HTTPError: HTTP Error 403: Forbidden",
-    "https://nitter.tiekoetter.com/NSWSharkSmart/rss: ParseError: syntax error: line 1, column 0"
+    "https://nitter.tiekoetter.com/NSWSharkSmart/rss: ParseError: syntax error: line 1, column 0",
+    "using last-good relay cache"
   ],
   "relay_version": "1.2"
 }
